@@ -91,8 +91,23 @@ export class SupabaseCatalogRepository implements CatalogRepository {
     if (brandIds) q = q.in("brand_id", brandIds);
     if (query.onSaleOnly) q = q.not("compare_at_price", "is", null);
     if (query.search) {
-      const s = query.search.replace(/[,%()]/g, " ").trim();
-      if (s) q = q.or(`name->>en.ilike.%${s}%,name->>ar.ilike.%${s}%`);
+      // Case-insensitive (ilike) match on the product name AND the brand name.
+      const s = query.search.replace(/[,%()*]/g, " ").trim();
+      if (s) {
+        const like = `%${s}%`;
+        const filters = [`name->>en.ilike.${like}`, `name->>ar.ilike.${like}`];
+        // Resolve brands whose (localized) name matches, and include their products.
+        const { data: brands } = await this.db.from("brands").select("id, name");
+        const term = s.toLowerCase();
+        const matchedBrandIds = (brands ?? [])
+          .filter((b) => {
+            const n = b.name as Record<string, string>;
+            return Object.values(n ?? {}).some((v) => (v ?? "").toLowerCase().includes(term));
+          })
+          .map((b) => b.id as string);
+        if (matchedBrandIds.length) filters.push(`brand_id.in.(${matchedBrandIds.join(",")})`);
+        q = q.or(filters.join(","));
+      }
     }
 
     switch (query.sort) {

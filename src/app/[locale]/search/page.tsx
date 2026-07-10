@@ -52,6 +52,12 @@ export default async function SearchPage({
       })
     : { items: [], total: 0, page: 1, pageSize: listing.perPage };
 
+  // When a search yields nothing, suggest popular/new products instead of a dead end.
+  const suggestions =
+    query && result.items.length === 0
+      ? (await getProducts({ sort: "newest", pageSize: 8 })).items
+      : [];
+
   const basePath = `/search`;
   const extra = query ? { q: query } : undefined;
 
@@ -71,7 +77,17 @@ export default async function SearchPage({
           <Pagination basePath={basePath} params={listing} total={result.total} extra={extra} />
         </>
       ) : (
-        <p className="py-20 text-center text-muted-foreground">{tl("noResults")}</p>
+        <div className="py-10">
+          <p className="mb-10 text-center text-muted-foreground">{tl("noResults")}</p>
+          {suggestions.length > 0 && (
+            <>
+              <h2 className="mb-6 text-center text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                {tl("suggestions")}
+              </h2>
+              <ProductGrid products={suggestions} locale={locale} />
+            </>
+          )}
+        </div>
       )}
     </Container>
   );

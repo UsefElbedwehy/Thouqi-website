@@ -65,7 +65,8 @@
     "priceHighLow": "Price: High to Low",
     "newest": "Newest",
     "showMore": "Show More",
-    "noResults": "No products match your filters.",
+    "noResults": "No products match your search.",
+    "suggestions": "You might like these",
     "clearFilters": "Clear filters"
   },
   "cart": {
