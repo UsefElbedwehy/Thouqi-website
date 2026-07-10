@@ -20,7 +20,7 @@ export const defaultSiteConfig: SiteConfig = {
     dark: "/brand/logo-dark.svg",
     alt: { en: "THOUQi", ar: "ذوقي" },
   },
-  favicon: "/favicon.ico",
+  favicon: "/favicon.svg",
 
   theme: {
     colors: {

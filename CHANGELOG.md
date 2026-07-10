@@ -5,6 +5,32 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Changed — Premium placeholder art (products, categories, hero, favicon, OG image)
+- Redesigned all 4 placeholder SVGs (`public/assets/ph/product-{1,2,3}.svg`,
+  `banner.svg`) with a refined "atelier plate" look — gradient background,
+  soft vignette, double hairline border, and a monogram medallion instead of
+  a single giant translucent letter. The 3 product variants now use distinct
+  motifs (circle / diamond / architrave rule) so the same 3 files reused
+  across the whole catalog read as a curated set rather than obvious clones.
+  These 4 files back every product, category tile, and hero/collection
+  banner image site-wide (verified via `assets.config.ts` + seed data), so
+  this is a global visual upgrade with zero code/schema changes.
+- **Fixed a real bug found along the way**: the old `banner.svg` baked in its
+  own large "FASHION / PREMIUM · CURATED" text, which visually collided with
+  the dynamic headline overlaid on top of it in `HeroCarousel` (e.g. "FASHION"
+  overlapping "ESCAPE IN STYLE"). The new banner is pure atmospheric backdrop
+  (gradient + border + a small discreet corner crest) with no competing text.
+- Added `public/favicon.svg` (bold monogram crest, legible at 16–32px) and
+  `public/assets/og-default.png` (1200×630, rasterized from a bespoke SVG via
+  `sharp`) for social share previews; wired both into
+  `src/app/[locale]/layout.tsx` metadata (`icons`, `openGraph.images`,
+  `twitter.card`) — previously `favicon.ico` was referenced but didn't exist
+  (broken tab icon) and there was no default OG image at all (blank social
+  previews). Patched the *live* remote `app_config.favicon` value directly
+  (not via `npm run seed`, which would have overwritten other admin edits
+  live in the DB — e.g. the nav customization) so the fix took effect without
+  redeploying or clobbering other config.
+
 ### Added — M4 hardening batch (variants, nav editor, reviews, mobile, hardening)
 - **Admin: per-size inventory editor** — `ProductForm` now tracks stock per
   selected size (was one shared count for all sizes); `saveProductAction`
