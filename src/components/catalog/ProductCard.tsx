@@ -23,6 +23,8 @@ export async function ProductCard({
   const assets = getAssets();
   const image = product.images[0]?.url ?? assets.placeholders.product;
   const onSale = product.compareAtPrice != null && product.compareAtPrice > product.price;
+  // Items with size options can't be quick-added — the customer must pick a size on the PDP.
+  const requiresSize = product.variants.some((v) => "size" in (v.options ?? {}));
   const lineItem = {
     productId: product.id,
     slug: product.slug,
@@ -54,9 +56,15 @@ export async function ProductCard({
             <WishlistButton item={lineItem} />
           </div>
 
-          {/* Quick add — slides up on hover */}
+          {/* Quick add — slides up on hover. Size items show a "Choose size" cue instead. */}
           <div className="absolute inset-x-0 bottom-0 translate-y-full transition-transform duration-300 group-hover:translate-y-0">
-            <QuickAddButton item={lineItem} />
+            {requiresSize ? (
+              <div className="w-full bg-background/95 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground backdrop-blur">
+                {tp("chooseSize")}
+              </div>
+            ) : (
+              <QuickAddButton item={lineItem} />
+            )}
           </div>
         </div>
       </Link>

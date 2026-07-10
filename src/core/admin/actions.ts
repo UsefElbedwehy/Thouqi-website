@@ -24,6 +24,9 @@ const productSchema = z.object({
   available: z.boolean().default(true),
   imageUrl: z.string().url().optional().or(z.literal("")),
   categoryId: z.string().uuid().optional().or(z.literal("")),
+  // Sizes offered (e.g. ["S","M","L"]). Empty = one-size (no size selection).
+  sizes: z.array(z.string().min(1)).optional().default([]),
+  sizeInventory: z.coerce.number().int().nonnegative().optional().default(20),
 });
 
 export interface AdminActionResult {
@@ -75,6 +78,22 @@ export async function saveProductAction(raw: unknown): Promise<AdminActionResult
   if (d.categoryId) {
     await db.from("product_categories").delete().eq("product_id", productId);
     await db.from("product_categories").insert({ product_id: productId, category_id: d.categoryId });
+  }
+
+  // Size variants: replace the product's size variants with the selected sizes.
+  // (Requiring a size at checkout is driven by whether these exist.)
+  await db.from("product_variants").delete().eq("product_id", productId);
+  if (d.sizes.length) {
+    await db.from("product_variants").insert(
+      d.sizes.map((size) => ({
+        product_id: productId,
+        sku: `${d.slug}-${size}`.toLowerCase(),
+        options: { size },
+        price: toMinor(d.price),
+        compare_at_price: d.compareAtPrice ? toMinor(d.compareAtPrice) : null,
+        inventory: d.sizeInventory,
+      })),
+    );
   }
 
   revalidatePath("/admin/products");

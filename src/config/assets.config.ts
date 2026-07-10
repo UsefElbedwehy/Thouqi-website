@@ -27,10 +27,10 @@ export interface AssetRegistry {
 
 export const defaultAssets: AssetRegistry = {
   placeholders: {
-    product: "/assets/placeholders/product.svg",
-    category: "/assets/placeholders/category.svg",
-    avatar: "/assets/placeholders/avatar.svg",
-    banner: "/assets/placeholders/banner.svg",
+    product: "/assets/ph/product-1.svg",
+    category: "/assets/ph/product-2.svg",
+    avatar: "/assets/ph/product-3.svg",
+    banner: "/assets/ph/banner.svg",
   },
   emptyStates: {
     cart: "/assets/empty/cart.svg",

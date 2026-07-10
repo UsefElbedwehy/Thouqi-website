@@ -51,7 +51,12 @@
     "now": "الآن",
     "outOfStock": "غير متوفّر",
     "seeMoreFromBrand": "شاهدي المزيد من منتجات {brand}",
-    "productId": "رقم المنتج"
+    "productId": "رقم المنتج",
+    "selectSize": "اختاري المقاس",
+    "selectOption": "اختاري الخيار",
+    "sizeRequired": "يرجى اختيار المقاس",
+    "addedToBag": "أُضيف",
+    "chooseSize": "اختاري المقاس"
   },
   "listing": {
     "categories": "الفئات",

@@ -102,7 +102,7 @@ export async function listAdminProducts(): Promise<AdminProductRow[]> {
 export async function getAdminProduct(id: string) {
   const { data, error } = await db()
     .from("products")
-    .select("*, product_images(url, sort_order), product_categories(category_id)")
+    .select("*, product_images(url, sort_order), product_categories(category_id), product_variants(options, inventory)")
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;

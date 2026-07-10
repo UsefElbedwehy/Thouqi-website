@@ -11,12 +11,17 @@ import type {
  * repository for local development and as the canonical seed shipped to
  * Supabase via `scripts/seed.ts`.
  *
- * Images use Unsplash (allowed in next.config) as stand-ins until real product
- * media is uploaded to Supabase Storage.
+ * Images use clean, modest local placeholder art (`/public/assets/ph/*`) until
+ * the client's real product media is uploaded. The `id` argument is kept for
+ * call-site compatibility but is only used to vary the placeholder.
  */
 
-const img = (id: string) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=800&q=80`;
+const img = (id: string) => {
+  // Deterministically pick one of three neutral placeholders from the id.
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return `/assets/ph/product-${(h % 3) + 1}.svg`;
+};
 
 export const brands: Brand[] = [
   { id: "b-rue15", slug: "rue15", name: { en: "RUE15", ar: "رو ١٥" } },
@@ -146,7 +151,7 @@ export const collections: Collection[] = [
     id: "col-featured", slug: "featured",
     title: { en: "Escape in Style", ar: "تألّقي بأناقة" },
     productIds: ["p-white-shirt", "p-sage-set", "p-polka-dress"],
-    bannerImage: img("photo-1483985988355-763728e1935b"),
+    bannerImage: "/assets/ph/banner.svg",
   },
 ];
 
@@ -156,7 +161,7 @@ export const banners: Banner[] = [
     title: { en: "Too Hot for the Shade", ar: "الصيف على الأبواب" },
     ctaLabel: { en: "Shop Now", ar: "تسوّقي الآن" },
     href: "/c/beachwear",
-    imageUrl: img("photo-1507525428034-b723cf961d3e"),
+    imageUrl: "/assets/ph/banner.svg",
     imageAlt: { en: "Beachwear collection", ar: "تشكيلة ملابس الشاطئ" },
   },
   {
@@ -164,7 +169,7 @@ export const banners: Banner[] = [
     title: { en: "Escape in Style", ar: "تألّقي بأناقة" },
     ctaLabel: { en: "Shop Now", ar: "تسوّقي الآن" },
     href: "/c/summer",
-    imageUrl: img("photo-1483985988355-763728e1935b"),
+    imageUrl: "/assets/ph/banner.svg",
     imageAlt: { en: "Summer collection", ar: "تشكيلة الصيف" },
   },
 ];

@@ -5,6 +5,9 @@ import { useRouter } from "@/i18n/navigation";
 import { saveProductAction } from "@/core/admin/actions";
 import type { LocalizedText } from "@/config/types";
 import { LocalizedField } from "./LocalizedField";
+import { cn } from "@/lib/utils";
+
+const SIZE_OPTIONS = ["XS", "S", "M", "L", "XL", "XXL"];
 
 export interface ProductFormInitial {
   id?: string;
@@ -17,6 +20,8 @@ export interface ProductFormInitial {
   available?: boolean;
   imageUrl?: string;
   categoryId?: string;
+  sizes?: string[];
+  sizeInventory?: number;
 }
 
 interface Option {
@@ -51,6 +56,12 @@ export function ProductForm({
   );
   const [available, setAvailable] = useState(initial?.available ?? true);
   const [imageUrl, setImageUrl] = useState(initial?.imageUrl ?? "");
+  const [sizes, setSizes] = useState<string[]>(initial?.sizes ?? []);
+  const [sizeInventory, setSizeInventory] = useState(String(initial?.sizeInventory ?? 20));
+
+  function toggleSize(s: string) {
+    setSizes((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
+  }
 
   const inputClass =
     "w-full rounded-[--radius] border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary";
@@ -76,6 +87,8 @@ export function ProductForm({
         available,
         imageUrl,
         categoryId,
+        sizes,
+        sizeInventory,
       });
       if (r.ok) {
         router.push("/admin/products");
@@ -126,6 +139,35 @@ export function ProductForm({
           <span className="mb-1 block text-xs font-medium text-muted-foreground">Compare-at price (KD)</span>
           <input value={compareAt} onChange={(e) => setCompareAt(e.target.value)} type="number" step="0.001" className={inputClass} />
         </label>
+      </div>
+
+      <div>
+        <p className="mb-1 text-xs font-medium text-muted-foreground">Sizes</p>
+        <p className="mb-2 text-xs text-muted-foreground">
+          Select the sizes this item comes in. Customers must choose a size before adding to cart.
+          Leave empty for one-size items (jewelry, beauty, bags…).
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {SIZE_OPTIONS.map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => toggleSize(s)}
+              className={cn(
+                "min-w-12 rounded-[--radius] border px-3 py-2 text-sm",
+                sizes.includes(s) ? "border-primary bg-primary/5 text-primary" : "border-border",
+              )}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+        {sizes.length > 0 && (
+          <label className="mt-3 block max-w-[200px]">
+            <span className="mb-1 block text-xs font-medium text-muted-foreground">Inventory per size</span>
+            <input value={sizeInventory} onChange={(e) => setSizeInventory(e.target.value)} type="number" min="0" className={inputClass} />
+          </label>
+        )}
       </div>
 
       <label className="flex items-center gap-2 text-sm">

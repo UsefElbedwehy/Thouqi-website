@@ -51,7 +51,12 @@
     "now": "Now",
     "outOfStock": "Out of Stock",
     "seeMoreFromBrand": "See more {brand} products",
-    "productId": "Product ID"
+    "productId": "Product ID",
+    "selectSize": "Select Size",
+    "selectOption": "Select Option",
+    "sizeRequired": "Please choose a size",
+    "addedToBag": "Added",
+    "chooseSize": "Choose size"
   },
   "listing": {
     "categories": "Categories",
