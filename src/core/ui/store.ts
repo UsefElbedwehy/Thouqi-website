@@ -11,10 +11,16 @@ interface UIState {
   cartOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
+  menuOpen: boolean;
+  openMenu: () => void;
+  closeMenu: () => void;
 }
 
 export const useUI = create<UIState>((set) => ({
   cartOpen: false,
   openCart: () => set({ cartOpen: true }),
   closeCart: () => set({ cartOpen: false }),
+  menuOpen: false,
+  openMenu: () => set({ menuOpen: true }),
+  closeMenu: () => set({ menuOpen: false }),
 }));

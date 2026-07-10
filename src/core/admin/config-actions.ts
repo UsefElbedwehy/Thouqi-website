@@ -113,6 +113,59 @@ export async function saveSettingsAction(raw: unknown): Promise<AdminActionResul
   return { ok: true };
 }
 
+/* ------------------------------ navigation --------------------------------- */
+
+const navLinkSchema = z.object({
+  labelEn: z.string().min(1),
+  labelAr: z.string().min(1),
+  href: z.string().min(1),
+});
+
+const navColumnSchema = z.object({
+  headingEn: z.string().optional().default(""),
+  headingAr: z.string().optional().default(""),
+  links: z.array(navLinkSchema),
+});
+
+const navItemSchema = z.object({
+  id: z.string().min(1),
+  labelEn: z.string().min(1),
+  labelAr: z.string().min(1),
+  href: z.string().min(1),
+  highlight: z.boolean().default(false),
+  columns: z.array(navColumnSchema).optional().default([]),
+});
+
+const navigationSchema = z.array(navItemSchema);
+
+export async function saveNavigationAction(raw: unknown): Promise<AdminActionResult> {
+  await assertAdmin();
+  const parsed = navigationSchema.safeParse(raw);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "invalid" };
+
+  const config = await readAdminConfig();
+  config.navigation = parsed.data.map((item) => ({
+    id: item.id,
+    label: { en: item.labelEn, ar: item.labelAr },
+    href: item.href,
+    highlight: item.highlight,
+    columns: item.columns.length
+      ? item.columns.map((c) => ({
+          heading: c.headingEn || c.headingAr ? { en: c.headingEn, ar: c.headingAr } : undefined,
+          links: c.links.map((l) => ({ label: { en: l.labelEn, ar: l.labelAr }, href: l.href })),
+        }))
+      : undefined,
+  }));
+
+  try {
+    await writeAdminConfig(config);
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+  revalidatePath("/", "layout");
+  return { ok: true };
+}
+
 /* ---------------------------- homepage builder ---------------------------- */
 
 const homeSectionsSchema = z.array(

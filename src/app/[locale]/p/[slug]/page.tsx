@@ -12,6 +12,7 @@ import { AddToCartPanel } from "@/components/catalog/AddToCartPanel";
 import { ProductGrid } from "@/components/catalog/ProductGrid";
 import { Accordion } from "@/components/ui/Accordion";
 import { ShareRow } from "@/components/catalog/ShareRow";
+import { ReviewsSection } from "@/components/catalog/ReviewsSection";
 import { SectionHeading } from "@/components/home/SectionHeading";
 
 type Params = { locale: string; slug: string };
@@ -142,6 +143,8 @@ export default async function ProductDetailPage({
           <ShareRow title={`${t(product.brand.name, locale)} — ${t(product.name, locale)}`} image={product.images[0]?.url} />
         </div>
       </div>
+
+      {config.features.reviews && <ReviewsSection productId={product.id} slug={product.slug} locale={locale} />}
 
       {related.length > 0 && (
         <section className="mt-16">

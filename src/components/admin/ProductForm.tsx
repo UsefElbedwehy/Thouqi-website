@@ -21,8 +21,7 @@ export interface ProductFormInitial {
   available?: boolean;
   imageUrl?: string;
   categoryId?: string;
-  sizes?: string[];
-  sizeInventory?: number;
+  variants?: { size: string; inventory: number }[];
 }
 
 interface Option {
@@ -57,11 +56,16 @@ export function ProductForm({
   );
   const [available, setAvailable] = useState(initial?.available ?? true);
   const [imageUrl, setImageUrl] = useState(initial?.imageUrl ?? "");
-  const [sizes, setSizes] = useState<string[]>(initial?.sizes ?? []);
-  const [sizeInventory, setSizeInventory] = useState(String(initial?.sizeInventory ?? 20));
+  const [variants, setVariants] = useState<{ size: string; inventory: number }[]>(initial?.variants ?? []);
 
   function toggleSize(s: string) {
-    setSizes((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
+    setVariants((prev) =>
+      prev.some((v) => v.size === s) ? prev.filter((v) => v.size !== s) : [...prev, { size: s, inventory: 20 }],
+    );
+  }
+
+  function setInventory(s: string, inventory: number) {
+    setVariants((prev) => prev.map((v) => (v.size === s ? { ...v, inventory } : v)));
   }
 
   const inputClass =
@@ -88,8 +92,7 @@ export function ProductForm({
         available,
         imageUrl,
         categoryId,
-        sizes,
-        sizeInventory,
+        variants,
       });
       if (r.ok) {
         router.push("/admin/products");
@@ -154,18 +157,28 @@ export function ProductForm({
               onClick={() => toggleSize(s)}
               className={cn(
                 "min-w-12 rounded-[--radius] border px-3 py-2 text-sm",
-                sizes.includes(s) ? "border-primary bg-primary/5 text-primary" : "border-border",
+                variants.some((v) => v.size === s) ? "border-primary bg-primary/5 text-primary" : "border-border",
               )}
             >
               {s}
             </button>
           ))}
         </div>
-        {sizes.length > 0 && (
-          <label className="mt-3 block max-w-[200px]">
-            <span className="mb-1 block text-xs font-medium text-muted-foreground">Inventory per size</span>
-            <input value={sizeInventory} onChange={(e) => setSizeInventory(e.target.value)} type="number" min="0" className={inputClass} />
-          </label>
+        {variants.length > 0 && (
+          <div className="mt-3 grid max-w-md grid-cols-2 gap-3 sm:grid-cols-3">
+            {variants.map((v) => (
+              <label key={v.size} className="block">
+                <span className="mb-1 block text-xs font-medium text-muted-foreground">Stock — {v.size}</span>
+                <input
+                  value={v.inventory}
+                  onChange={(e) => setInventory(v.size, Math.max(0, parseInt(e.target.value, 10) || 0))}
+                  type="number"
+                  min="0"
+                  className={inputClass}
+                />
+              </label>
+            ))}
+          </div>
         )}
       </div>
 

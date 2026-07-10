@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter, Link } from "@/i18n/navigation";
 import { signInAction, signUpAction } from "@/core/auth/actions";
+import { mergeWishlistAction } from "@/core/wishlist/actions";
+import { useWishlist } from "@/core/wishlist/store";
 import { cn } from "@/lib/utils";
 
 /** Sign-in / sign-up form. `mode` selects behaviour; both call server actions. */
@@ -13,6 +15,8 @@ export function AuthForm({ mode }: { mode: "signin" | "signup" }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const wishlistItems = useWishlist((s) => s.items);
+  const mergeWishlist = useWishlist((s) => s.merge);
 
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -28,6 +32,12 @@ export function AuthForm({ mode }: { mode: "signin" | "signup" }) {
       const result =
         mode === "signup" ? await signUpAction(payload) : await signInAction(payload);
       if (result.ok) {
+        try {
+          const merge = await mergeWishlistAction(wishlistItems.map((i) => i.productId));
+          if (merge.ok && merge.newItems?.length) mergeWishlist(merge.newItems);
+        } catch {
+          // Best-effort: never block sign-in on wishlist sync.
+        }
         router.push("/account");
         router.refresh();
       } else {

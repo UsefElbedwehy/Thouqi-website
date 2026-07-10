@@ -37,7 +37,7 @@ export async function ProductCard({
   return (
     <div className="group">
       <Link href={`/p/${product.slug}` as never} className="block">
-        <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+        <div className="relative aspect-[3/4] overflow-hidden bg-muted shadow-[0_2px_8px_-4px_rgba(0,0,0,0)] transition-shadow duration-500 group-hover:shadow-[0_24px_40px_-16px_rgba(0,0,0,0.22)]">
           <Image
             src={image}
             alt={t(product.images[0]?.alt ?? product.name, locale)}
@@ -59,7 +59,7 @@ export async function ProductCard({
           {/* Quick add — slides up on hover. Size items show a "Choose size" cue instead. */}
           <div className="absolute inset-x-0 bottom-0 translate-y-full transition-transform duration-300 group-hover:translate-y-0">
             {requiresSize ? (
-              <div className="w-full bg-background/95 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground backdrop-blur">
+              <div className="glass-strong w-full border-x-0 border-b-0 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
                 {tp("chooseSize")}
               </div>
             ) : (

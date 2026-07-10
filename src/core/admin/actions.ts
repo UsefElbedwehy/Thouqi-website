@@ -24,9 +24,11 @@ const productSchema = z.object({
   available: z.boolean().default(true),
   imageUrl: z.string().refine((v) => v === "" || /^(https?:\/\/|\/)/.test(v), "must be a URL or path").optional().or(z.literal("")),
   categoryId: z.string().uuid().optional().or(z.literal("")),
-  // Sizes offered (e.g. ["S","M","L"]). Empty = one-size (no size selection).
-  sizes: z.array(z.string().min(1)).optional().default([]),
-  sizeInventory: z.coerce.number().int().nonnegative().optional().default(20),
+  // Size variants offered, each with its own stock count. Empty = one-size (no size selection).
+  variants: z
+    .array(z.object({ size: z.string().min(1), inventory: z.coerce.number().int().nonnegative() }))
+    .optional()
+    .default([]),
 });
 
 export interface AdminActionResult {
@@ -80,20 +82,29 @@ export async function saveProductAction(raw: unknown): Promise<AdminActionResult
     await db.from("product_categories").insert({ product_id: productId, category_id: d.categoryId });
   }
 
-  // Size variants: replace the product's size variants with the selected sizes.
-  // (Requiring a size at checkout is driven by whether these exist.)
-  await db.from("product_variants").delete().eq("product_id", productId);
-  if (d.sizes.length) {
-    await db.from("product_variants").insert(
-      d.sizes.map((size) => ({
+  // Size variants: sync to the selected sizes, keyed by SKU so unchanged sizes
+  // keep their variant id (order_items.variant_id references it). Requiring a
+  // size at checkout is driven by whether any variants exist.
+  const keepSkus = d.variants.map((v) => `${d.slug}-${v.size}`.toLowerCase());
+  if (keepSkus.length) {
+    await db
+      .from("product_variants")
+      .delete()
+      .eq("product_id", productId)
+      .not("sku", "in", `(${keepSkus.join(",")})`);
+    await db.from("product_variants").upsert(
+      d.variants.map((v) => ({
         product_id: productId,
-        sku: `${d.slug}-${size}`.toLowerCase(),
-        options: { size },
+        sku: `${d.slug}-${v.size}`.toLowerCase(),
+        options: { size: v.size },
         price: toMinor(d.price),
         compare_at_price: d.compareAtPrice ? toMinor(d.compareAtPrice) : null,
-        inventory: d.sizeInventory,
+        inventory: v.inventory,
       })),
+      { onConflict: "sku" },
     );
+  } else {
+    await db.from("product_variants").delete().eq("product_id", productId);
   }
 
   revalidatePath("/admin/products");

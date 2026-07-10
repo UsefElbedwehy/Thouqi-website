@@ -2,8 +2,9 @@
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/data/supabase/server";
+import { createSupabaseServerClient, createSupabaseAdminClient } from "@/data/supabase/server";
 import { getCurrentUser } from "@/core/auth/user";
+import { assertAdmin } from "@/core/admin/guard";
 
 const schema = z.object({
   productId: z.string().uuid(),
@@ -41,5 +42,25 @@ export async function submitReviewAction(raw: unknown): Promise<ReviewResult> {
   if (error) return { ok: false, error: "server" };
 
   if (parsed.data.slug) revalidatePath(`/p/${parsed.data.slug}`);
+  return { ok: true };
+}
+
+/** Approve a pending review (admin only) so it becomes publicly visible. */
+export async function approveReviewAction(id: string): Promise<ReviewResult> {
+  await assertAdmin();
+  const db = createSupabaseAdminClient();
+  const { error } = await db.from("reviews").update({ approved: true }).eq("id", id);
+  if (error) return { ok: false, error: "server" };
+  revalidatePath("/admin/reviews");
+  return { ok: true };
+}
+
+/** Reject (delete) a pending review (admin only). */
+export async function rejectReviewAction(id: string): Promise<ReviewResult> {
+  await assertAdmin();
+  const db = createSupabaseAdminClient();
+  const { error } = await db.from("reviews").delete().eq("id", id);
+  if (error) return { ok: false, error: "server" };
+  revalidatePath("/admin/reviews");
   return { ok: true };
 }

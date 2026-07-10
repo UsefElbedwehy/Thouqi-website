@@ -24,6 +24,8 @@ interface WishlistState {
   remove: (productId: string) => void;
   has: (productId: string) => boolean;
   clear: () => void;
+  /** Add items fetched from the account's server wishlist that aren't local yet. */
+  merge: (items: WishlistItem[]) => void;
 }
 
 export const useWishlist = create<WishlistState>()(
@@ -40,6 +42,12 @@ export const useWishlist = create<WishlistState>()(
         set((state) => ({ items: state.items.filter((i) => i.productId !== productId) })),
       has: (productId) => get().items.some((i) => i.productId === productId),
       clear: () => set({ items: [] }),
+      merge: (items) =>
+        set((state) => {
+          const existingIds = new Set(state.items.map((i) => i.productId));
+          const additions = items.filter((i) => !existingIds.has(i.productId));
+          return additions.length ? { items: [...state.items, ...additions] } : state;
+        }),
     }),
     { name: "thouqi-wishlist" },
   ),

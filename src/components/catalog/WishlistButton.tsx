@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Heart } from "lucide-react";
 import { useWishlist, type WishlistItem } from "@/core/wishlist/store";
+import { setWishlistItemAction } from "@/core/wishlist/actions";
 import { cn } from "@/lib/utils";
 
 /**
@@ -32,6 +33,8 @@ export function WishlistButton({
     e.preventDefault();
     e.stopPropagation();
     toggle(item);
+    // Best-effort: syncs for signed-in users, silently no-ops for guests.
+    setWishlistItemAction(item.productId, !inList).catch(() => {});
   }
 
   if (variant === "button") {

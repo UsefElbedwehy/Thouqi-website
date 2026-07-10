@@ -51,17 +51,24 @@ Legend: ✅ done · 🚧 in progress · ⬜ planned
       storefront now runs `NEXT_PUBLIC_CONFIG_SOURCE=remote`
 - ✅ Collections admin (CRUD + product picker) + storefront `/collections/[slug]`
 - ✅ Offers/Sale storefront page + live-search typeahead + PDP social share
-- ⬜ Follow-ups: product variants/inventory & image-gallery (Storage) editors,
-      remote nav editor
+- ✅ Product variants/inventory editor (per-size stock), image upload to Storage,
+      remote nav/mega-menu editor (`/admin/navigation`)
 
 ## M4 — Hardening & launch
-- ⬜ Reviews & ratings (moderation)
+- ✅ Reviews & ratings — PDP submit form + star summary, admin moderation queue
+      (approve/reject), gated by `config.features.reviews`
 - ✅ Payments — admin-toggleable methods + secret key store + dynamic checkout
       (COD-only by default); MyFatoorah/KNET provider + sandbox; redirect →
       webhook → callback → capture flow (production-ready pending the live key)
-- 🚧 Test suite — ✅ unit (Vitest, 42 tests); ⬜ e2e (Playwright critical paths)
+- ✅ Test suite — unit (Vitest, 47 tests) + e2e (Playwright: browse→cart→checkout,
+      admin login→product CRUD), run separately from CI (hits live Supabase)
+- ✅ Guest → account cart/wishlist merge on login (+ ongoing sync while signed in)
+- ✅ Mobile nav drawer, hero carousel (autoplay/controls)
+- ✅ error.tsx boundaries (storefront, admin, global-error)
 - ⬜ a11y audit (WCAG 2.1 AA), performance budget, SEO sitemap/robots
-- ✅ CI pipeline (GitHub Actions: typecheck → test → hermetic build); ⬜ preview deploys
-- ⬜ Blog (feature-flagged), analytics (GA4)
+- ✅ CI pipeline (GitHub Actions: lint → typecheck → test → hermetic build); ⬜ preview deploys
+- ✅ ESLint (flat config) wired into `npm run lint` + CI
+- ✅ Analytics (GA4 via gtag.js, feature-flagged on measurement ID env var)
+- ⬜ Blog (feature-flagged)
 
 See [`TODO.md`](TODO.md) for the near-term working list.

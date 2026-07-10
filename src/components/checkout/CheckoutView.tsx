@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { Check, CheckCircle2 } from "lucide-react";
 import { useCart } from "@/core/cart/store";

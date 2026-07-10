@@ -13,6 +13,7 @@ import { ThemeStyle } from "@/components/theme/ThemeStyle";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -70,6 +71,7 @@ export default async function LocaleLayout({
               <main className="flex-1">{children}</main>
               <SiteFooter config={config} locale={locale} />
               <CartDrawer locale={locale} />
+              <GoogleAnalytics />
             </>
           )}
         </NextIntlClientProvider>

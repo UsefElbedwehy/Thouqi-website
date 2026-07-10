@@ -5,6 +5,40 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Added — M4 hardening batch (variants, nav editor, reviews, mobile, hardening)
+- **Admin: per-size inventory editor** — `ProductForm` now tracks stock per
+  selected size (was one shared count for all sizes); `saveProductAction`
+  upserts `product_variants` by SKU instead of delete+reinsert, so variant ids
+  survive edits (`order_items.variant_id` stays valid).
+- **Admin: remote nav/mega-menu editor** (`/admin/navigation`) — reorderable
+  top-level items + mega-menu columns/links, localized EN/AR, writes to
+  `app_config.navigation`; storefront header picks it up immediately.
+- **Guest → account wishlist merge on login** — `mergeWishlistAction` pushes
+  the guest's local wishlist into `wishlist_items` at sign-in and pulls back
+  anything saved on the account from another session; `setWishlistItemAction`
+  keeps the server copy in sync on every toggle/remove while signed in (not
+  just at login). Cart intentionally needs no merge — it's browser-scoped
+  localStorage with no server table.
+- **Mobile nav drawer** — slide-over accordion menu (`< md`, RTL-aware),
+  mirrors the mega-nav data since `MegaNav` itself is desktop-only.
+- **Hero carousel** — autoplays through all active banners, pauses on
+  hover/focus, arrow + dot controls; replaces the single static SSR slide.
+- **Reviews & ratings** — PDP star-rating submit form + average/count summary
+  + approved-review list (gated by `config.features.reviews`); admin
+  moderation queue (`/admin/reviews`) to approve/reject pending reviews.
+- **error.tsx boundaries** — storefront-wide, admin-scoped (English chrome),
+  and a root `global-error.tsx` for failures in the root layout itself.
+- **ESLint** — flat config (`next/core-web-vitals` + `next/typescript`);
+  `npm run lint` is clean; CI now runs lint → typecheck → test → build.
+- **Analytics** — GA4 via `gtag.js`, feature-flagged on
+  `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` (off unless set); fires `page_view` on
+  every client-side route change since the App Router doesn't do this itself.
+- Added `tests/wishlist-store.test.ts` (toggle/remove/merge); 47 unit tests total.
+- **e2e (Playwright)** — `e2e/storefront.spec.ts` (browse → add to bag → reach
+  checkout) and `e2e/admin.spec.ts` (sign in → create/edit/delete a product,
+  self-cleaning). Integration tests against the real Supabase project, so kept
+  out of the CI job (which builds hermetically); run via `npm run test:e2e`.
+
 ### Added — Live payment flow (KNET/MyFatoorah + sandbox)
 - **`PaymentProvider` abstraction** with two implementations: a production-ready
   **MyFatoorah** provider (KNET + cards; SendPayment / getPaymentStatus) and a

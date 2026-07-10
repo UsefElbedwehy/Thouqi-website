@@ -84,7 +84,7 @@ export function SearchBox() {
       </form>
 
       {open && results.length > 0 && (
-        <div className="absolute inset-x-0 top-full z-50 mt-2 border border-border bg-background shadow-[0_20px_40px_-20px_rgba(0,0,0,0.3)]">
+        <div className="glass-strong absolute inset-x-0 top-full z-50 mt-2">
           <ul className="max-h-[380px] overflow-auto py-1">
             {results.map((r) => (
               <li key={r.id}>

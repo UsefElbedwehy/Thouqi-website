@@ -45,7 +45,7 @@ function NavTopItem({ item, locale }: { item: NavItem; locale: string }) {
             "group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100",
           )}
         >
-          <div className="border-t border-border bg-background/95 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.25)] backdrop-blur-md">
+          <div className="glass-strong">
             <Container className="flex gap-16 py-10">
               {item.columns!.map((col, i) => (
                 <div key={i} className="min-w-[160px]">

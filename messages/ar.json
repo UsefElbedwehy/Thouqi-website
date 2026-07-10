@@ -58,6 +58,22 @@
     "addedToBag": "أُضيف",
     "chooseSize": "اختاري المقاس"
   },
+  "reviews": {
+    "title": "التقييمات",
+    "noReviews": "لا توجد تقييمات بعد.",
+    "basedOn": "بناءً على {count} {count, plural, one {تقييم} other {تقييمات}}",
+    "writeReview": "أضيفي تقييمًا",
+    "signInToReview": "سجّلي الدخول لإضافة تقييم",
+    "rating": "التقييم",
+    "comment": "تعليق (اختياري)",
+    "submit": "إرسال التقييم",
+    "submitted": "شكرًا! تقييمك بانتظار الموافقة.",
+    "error": "تعذّر إرسال تقييمك. حاولي مرة أخرى.",
+    "pendingApproval": "بانتظار موافقة الإدارة",
+    "approve": "موافقة",
+    "reject": "رفض",
+    "noPending": "لا توجد تقييمات بانتظار المراجعة."
+  },
   "listing": {
     "categories": "الفئات",
     "refineBy": "تصفية حسب",

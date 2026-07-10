@@ -1,6 +1,7 @@
 import "server-only";
 import type { CatalogRepository } from "@/core/catalog/repository";
 import { MockCatalogRepository } from "./mock/catalog.repository";
+import { SupabaseCatalogRepository } from "./supabase/catalog.repository";
 
 /**
  * Dependency-injection point for the data layer.
@@ -19,13 +20,9 @@ export function getCatalogRepository(): CatalogRepository {
 
   const source = process.env.DATA_SOURCE ?? "mock";
   switch (source) {
-    case "supabase": {
-      // Lazily required so the Supabase repo (and its heavy deps) are only
-      // loaded when actually selected.
-      const { SupabaseCatalogRepository } = require("./supabase/catalog.repository");
+    case "supabase":
       _catalog = new SupabaseCatalogRepository();
       break;
-    }
     case "mock":
     default:
       _catalog = new MockCatalogRepository();

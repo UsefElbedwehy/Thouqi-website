@@ -236,6 +236,38 @@ export async function listAdminCollections(): Promise<AdminCollectionRow[]> {
   }));
 }
 
+export interface AdminReviewRow {
+  id: string;
+  productId: string;
+  productName: LocalizedText | null;
+  rating: number;
+  body: string | null;
+  authorName: string | null;
+  createdAt: string;
+}
+
+/** Reviews awaiting moderation (approved=false), oldest first. */
+export async function listPendingReviews(): Promise<AdminReviewRow[]> {
+  const { data, error } = await db()
+    .from("reviews")
+    .select("id, product_id, rating, body, author_name, created_at, product:products(name)")
+    .eq("approved", false)
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return ((data as Record<string, unknown>[]) ?? []).map((r) => {
+    const product = r.product as Record<string, unknown> | null;
+    return {
+      id: r.id as string,
+      productId: r.product_id as string,
+      productName: product ? (product.name as LocalizedText) : null,
+      rating: r.rating as number,
+      body: (r.body as string) ?? null,
+      authorName: (r.author_name as string) ?? null,
+      createdAt: (r.created_at as string) ?? new Date().toISOString(),
+    };
+  });
+}
+
 export async function getAdminCollection(id: string) {
   const { data, error } = await db()
     .from("collections")

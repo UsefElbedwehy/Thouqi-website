@@ -6,6 +6,7 @@ import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/core/cart/store";
 import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/format";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { CartLineRow } from "./CartLineRow";
 
 /** Full shopping-bag page. Client-rendered from the persisted cart store. */
@@ -16,7 +17,25 @@ export function CartView({ locale }: { locale: string }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return (
+      <div className="grid gap-10 lg:grid-cols-[1fr_320px]">
+        <div className="space-y-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex gap-4">
+              <Skeleton className="size-24 shrink-0" />
+              <div className="flex-1 space-y-2 py-1">
+                <Skeleton className="h-3 w-1/3" />
+                <Skeleton className="h-3.5 w-2/3" />
+                <Skeleton className="h-3 w-1/4" />
+              </div>
+            </div>
+          ))}
+        </div>
+        <Skeleton className="h-40 w-full" />
+      </div>
+    );
+  }
 
   if (lines.length === 0) {
     return (

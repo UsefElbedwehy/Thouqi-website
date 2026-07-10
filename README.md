@@ -49,6 +49,7 @@ database is required** to develop the storefront.
 | `npm run lint` | ESLint |
 | `npm test` | Run the Vitest unit suite |
 | `npm run test:watch` | Vitest in watch mode |
+| `npm run test:e2e` | Run the Playwright e2e suite (needs a live Supabase in `.env.local`) |
 | `npm run migrate` | Apply SQL migrations via the Supabase Management API |
 | `npm run seed` | Seed Supabase from the canonical mock data |
 
@@ -56,10 +57,20 @@ database is required** to develop the storefront.
 
 Unit tests (Vitest) live in `tests/` and cover framework-agnostic domain logic —
 the mock catalog repository (filter/sort/paginate/lookup), formatters, listing
-URL params, checkout/shipping rules, config helpers and the cart store. They need
-no network or Supabase: `npm test`. GitHub Actions (`.github/workflows/ci.yml`)
-runs typecheck → tests → a hermetic build (mock data, local config) on every push
-and PR.
+URL params, checkout/shipping rules, config helpers and the cart/wishlist stores.
+They need no network or Supabase: `npm test`. GitHub Actions
+(`.github/workflows/ci.yml`) runs lint → typecheck → tests → a hermetic build
+(mock data, local config) on every push and PR.
+
+e2e tests (Playwright) live in `e2e/` and cover the two critical paths — browse
+→ add to bag → checkout, and admin sign-in → create/edit/delete a product. Unlike
+the unit suite, these are **integration tests against the real Supabase project**
+in `.env.local` (not the hermetic mock build), so they're intentionally **not**
+part of the CI job — run them locally/against staging with `npm run test:e2e`
+(boots `next dev` itself, or point at a running server via `E2E_BASE_URL`). The
+admin test creates and deletes its own ephemeral product per run, so it's safe
+to re-run without accumulating test data. Override credentials with
+`E2E_ADMIN_EMAIL` / `E2E_ADMIN_PASSWORD` if needed.
 
 ## Documentation
 

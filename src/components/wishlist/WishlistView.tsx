@@ -3,13 +3,15 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { X } from "lucide-react";
+import { Heart, X } from "lucide-react";
 import { useWishlist } from "@/core/wishlist/store";
+import { setWishlistItemAction } from "@/core/wishlist/actions";
 import { useCart } from "@/core/cart/store";
 import { useUI } from "@/core/ui/store";
 import { Link } from "@/i18n/navigation";
 import { t, formatPrice } from "@/lib/format";
 import { defaultAssets } from "@/config/assets.config";
+import { ProductGridSkeleton } from "@/components/catalog/ProductCardSkeleton";
 
 /** Wishlist grid rendered from the persisted wishlist store. */
 export function WishlistView({ locale }: { locale: string }) {
@@ -22,11 +24,12 @@ export function WishlistView({ locale }: { locale: string }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  if (!mounted) return null;
+  if (!mounted) return <ProductGridSkeleton count={8} />;
 
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-24 text-center">
+        <Heart className="size-10 text-muted-foreground/40" strokeWidth={1.25} />
         <p className="text-muted-foreground">{tw("empty")}</p>
         <Link href="/" className="rounded-[--radius] bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90">
           {tw("browse")}
@@ -53,7 +56,10 @@ export function WishlistView({ locale }: { locale: string }) {
             </Link>
             <button
               type="button"
-              onClick={() => removeWish(item.productId)}
+              onClick={() => {
+                removeWish(item.productId);
+                setWishlistItemAction(item.productId, false).catch(() => {});
+              }}
               aria-label={tc("close")}
               className="absolute end-2 top-2 flex size-8 items-center justify-center rounded-full bg-background/80 backdrop-blur hover:text-accent"
             >

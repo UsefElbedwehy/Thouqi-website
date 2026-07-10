@@ -9,6 +9,8 @@ import {
   Users,
   FileText,
   LayoutTemplate,
+  Menu,
+  Star,
   CreditCard,
   Settings,
   ArrowLeft,
@@ -40,8 +42,10 @@ export default async function AdminLayout({
     { href: "/admin/categories", label: "Categories", Icon: FolderTree },
     { href: "/admin/collections", label: "Collections", Icon: Layers },
     { href: "/admin/orders", label: "Orders", Icon: ShoppingCart },
+    { href: "/admin/reviews", label: "Reviews", Icon: Star },
     { href: "/admin/customers", label: "Customers", Icon: Users },
     { href: "/admin/homepage", label: "Homepage", Icon: LayoutTemplate },
+    { href: "/admin/navigation", label: "Navigation", Icon: Menu },
     { href: "/admin/cms", label: "CMS Pages", Icon: FileText },
     { href: "/admin/payments", label: "Payments", Icon: CreditCard },
     { href: "/admin/settings", label: "Settings", Icon: Settings },
@@ -49,7 +53,7 @@ export default async function AdminLayout({
 
   return (
     <div className="flex min-h-screen">
-      <aside className="hidden w-60 shrink-0 border-e border-border bg-muted/30 md:block">
+      <aside className="glass sticky top-0 hidden h-screen w-60 shrink-0 overflow-y-auto rounded-none border-y-0 border-s-0 md:block">
         <div className="border-b border-border p-5">
           <span className="font-display text-xl font-semibold uppercase tracking-wide">Admin</span>
           <p className="mt-1 truncate text-xs text-muted-foreground">{admin?.email}</p>

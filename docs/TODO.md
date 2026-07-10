@@ -32,33 +32,36 @@ Tracks the immediate next slices. Broader plan in [`ROADMAP.md`](ROADMAP.md).
 - [x] Offers/Sale page (`/offers`) + Sale nav wiring
 - [x] Live-search typeahead (`/api/search` + header SearchBox) + PDP share row
 
-## Next up (M3 follow-ups → M4)
-- [ ] Admin: product variants/inventory editor; image-gallery upload to Storage
-- [ ] Admin: remote nav/mega-menu editor
-- [ ] Guest → account cart/wishlist merge on login
-- [ ] Real product media in Storage (replace Unsplash)
-- [x] Unit test suite (Vitest) + GitHub Actions CI
+## Done (M3 follow-ups → M4)
+- [x] Admin: product variants/inventory editor (per-size stock, stable SKUs on save)
+- [x] Admin: remote nav/mega-menu editor (`/admin/navigation` → `app_config.navigation`)
+- [x] Guest → account cart/wishlist merge on login (+ ongoing sync while signed in)
+- [x] Admin image upload to Storage (`product-media` bucket)
+- [x] Unit test suite (Vitest) + GitHub Actions CI (lint → typecheck → test → build)
 - [x] Payments: admin enable/disable + methods + secret key store + dynamic checkout
 - [x] Live gateway flow: MyFatoorah/KNET provider + sandbox; redirect → webhook →
       callback → capture (verified via sandbox; needs the client's live key to go live)
+- [x] Reviews & ratings: PDP submit form + rating summary, admin moderation queue
+- [x] Mobile nav drawer (accordion, RTL-aware) for `< md`
+- [x] Hero carousel (autoplay, pause-on-hover, arrows/dots) — replaces the static SSR hero
+- [x] error.tsx boundaries: storefront, admin, and global-error
+- [x] ESLint config (flat config, `next/core-web-vitals` + `next/typescript`) + `npm run lint` in CI
+- [x] Analytics: GA4 via gtag.js, feature-flagged on `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`
+      (off unless set — currently set, so it's live)
 - [ ] Go-live: obtain MyFatoorah key, set provider=knet, test one real KNET payment
-- [ ] e2e tests (Playwright critical paths); reviews & ratings; analytics (GA4)
+- [x] e2e tests (Playwright): browse→cart→checkout, admin login→create/edit/delete
+      product. Runs against the live Supabase project, not CI's hermetic build —
+      see README "Testing & CI" — `npm run test:e2e`
 
 ## Data
-- [x] Implement `SupabaseCatalogRepository` methods (row → domain mapping)
+- [x] Implement `SupabaseCatalogRepository` methods (row → domain mapping) — live, `DATA_SOURCE=supabase`
 - [x] `scripts/seed.ts`: push `catalog.data.ts` into Supabase (UUIDv5 mapping)
-- [x] Apply `0001_init.sql` to the project and flip `DATA_SOURCE=supabase`
-- [ ] Upload real product media to Storage; replace Unsplash URLs
-- [ ] Implement orders/customers repositories (persist `placeOrder`, account data)
+- [x] Implement orders/customers/wishlist repositories (persist `placeOrder`, account data, wishlist sync)
+- [ ] Upload real product media to Storage; replace placeholder SVGs
 
 ## Cross-cutting
 - [ ] Real brand assets: `public/brand/logo.svg`, favicon, placeholder SVGs
-- [ ] Mobile nav drawer (client island) for `< md`
-- [ ] Hero carousel client upgrade (autoplay/controls)
-- [ ] ESLint config + `npm run lint` in CI
-- [ ] Unit tests for services + `MockCatalogRepository`
+- [x] Unit tests for services + `MockCatalogRepository` (+ wishlist store)
 
 ## Known follow-ups / tech debt
-- `next/image` currently allows Unsplash for mock media — swap for Storage URLs.
-- `SupabaseCatalogRepository` throws until wired (guard: `DATA_SOURCE=mock`).
-- Add `error.tsx` boundaries per route segment.
+- Placeholder SVG media (`/assets/ph/*.svg`) still stands in for real product photos.

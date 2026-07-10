@@ -24,11 +24,12 @@ export default async function EditProductPage({
     (a, b) => ((a.sort_order as number) ?? 0) - ((b.sort_order as number) ?? 0),
   );
   const cats = (product.product_categories as Record<string, unknown>[]) ?? [];
-  const variants = (product.product_variants as Record<string, unknown>[]) ?? [];
-  const sizes = variants
-    .map((v) => (v.options as Record<string, string>)?.size)
-    .filter((s): s is string => !!s);
-  const sizeInventory = (variants[0]?.inventory as number) ?? 20;
+  const variants = ((product.product_variants as Record<string, unknown>[]) ?? [])
+    .map((v) => ({
+      size: (v.options as Record<string, string>)?.size,
+      inventory: (v.inventory as number) ?? 0,
+    }))
+    .filter((v): v is { size: string; inventory: number } => !!v.size);
 
   return (
     <div>
@@ -45,8 +46,7 @@ export default async function EditProductPage({
           available: product.available as boolean,
           imageUrl: (images[0]?.url as string) ?? "",
           categoryId: (cats[0]?.category_id as string) ?? "",
-          sizes,
-          sizeInventory,
+          variants,
         }}
         brands={brands.map((b) => ({ id: b.id, label: t(b.name, locale) }))}
         categories={categories.map((c) => ({ id: c.id, label: t(c.name, locale) }))}

@@ -9,6 +9,8 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MegaNav } from "./MegaNav";
 import { AnnouncementBar } from "./AnnouncementBar";
 import { SearchBox } from "./SearchBox";
+import { MobileMenuButton } from "./MobileMenuButton";
+import { MobileNavDrawer } from "./MobileNavDrawer";
 import { CartButton } from "@/components/cart/CartButton";
 
 /**
@@ -31,7 +33,7 @@ export async function SiteHeader({
     <header className="sticky top-0 z-40">
       <AnnouncementBar />
 
-      <div className="border-b border-border bg-background/85 backdrop-blur-md">
+      <div className="glass">
         {/* Utility row */}
         <Container className="flex h-9 items-center justify-end gap-5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
           <LanguageSwitcher locale={locale} />
@@ -54,21 +56,24 @@ export async function SiteHeader({
 
         {/* Brand + search + actions */}
         <Container className="grid grid-cols-[1fr_auto_1fr] items-center gap-6 py-5">
-          <div className="hidden items-center md:flex">
-            {config.features.liveSearch ? (
-              <SearchBox />
-            ) : (
-              <form action={`/${locale}/search`} className="flex w-full max-w-[280px] items-center gap-2 border-b border-border pb-1.5 focus-within:border-foreground">
-                <Search className="size-4 text-muted-foreground" />
-                <input
-                  type="search"
-                  name="q"
-                  placeholder={tc("search")}
-                  className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground placeholder:tracking-wide"
-                  aria-label={tc("search")}
-                />
-              </form>
-            )}
+          <div className="flex items-center">
+            <MobileMenuButton />
+            <div className="hidden items-center md:flex">
+              {config.features.liveSearch ? (
+                <SearchBox />
+              ) : (
+                <form action={`/${locale}/search`} className="flex w-full max-w-[280px] items-center gap-2 border-b border-border pb-1.5 focus-within:border-foreground">
+                  <Search className="size-4 text-muted-foreground" />
+                  <input
+                    type="search"
+                    name="q"
+                    placeholder={tc("search")}
+                    className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground placeholder:tracking-wide"
+                    aria-label={tc("search")}
+                  />
+                </form>
+              )}
+            </div>
           </div>
 
           <Link
@@ -105,6 +110,8 @@ export async function SiteHeader({
         {/* Primary navigation */}
         <MegaNav config={config} locale={locale} />
       </div>
+
+      <MobileNavDrawer navigation={config.navigation} locale={locale} signedIn={!!user} />
     </header>
   );
 }

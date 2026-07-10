@@ -48,7 +48,7 @@ export function CartDrawer({ locale }: { locale: string }) {
         aria-modal="true"
         aria-label={tcart("title")}
         className={cn(
-          "fixed inset-y-0 end-0 z-50 flex w-full max-w-sm flex-col bg-background shadow-xl transition-transform duration-300",
+          "glass-strong fixed inset-y-0 end-0 z-50 flex w-full max-w-sm flex-col transition-transform duration-300",
           open ? "translate-x-0" : "translate-x-full rtl:-translate-x-full",
         )}
       >

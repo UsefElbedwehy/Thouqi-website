@@ -58,6 +58,22 @@
     "addedToBag": "Added",
     "chooseSize": "Choose size"
   },
+  "reviews": {
+    "title": "Reviews",
+    "noReviews": "No reviews yet.",
+    "basedOn": "Based on {count} {count, plural, one {review} other {reviews}}",
+    "writeReview": "Write a Review",
+    "signInToReview": "Sign in to write a review",
+    "rating": "Rating",
+    "comment": "Comment (optional)",
+    "submit": "Submit Review",
+    "submitted": "Thanks! Your review is awaiting approval.",
+    "error": "Could not submit your review. Please try again.",
+    "pendingApproval": "Pending admin approval",
+    "approve": "Approve",
+    "reject": "Reject",
+    "noPending": "No reviews awaiting moderation."
+  },
   "listing": {
     "categories": "Categories",
     "refineBy": "Refine By",
