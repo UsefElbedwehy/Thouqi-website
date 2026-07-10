@@ -9,6 +9,20 @@ const profileSchema = z.object({
   phone: z.string().min(6).optional().or(z.literal("")),
 });
 
+/** Change the signed-in user's password (min 8 chars). */
+export async function changePasswordAction(raw: unknown): Promise<{ ok: boolean; error?: string }> {
+  const parsed = z.object({ password: z.string().min(8) }).safeParse(raw);
+  if (!parsed.success) return { ok: false, error: "Password must be at least 8 characters." };
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "Not signed in." };
+  const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
 /** Update the signed-in customer's profile (RLS: own row only). */
 export async function updateProfileAction(raw: unknown): Promise<{ ok: boolean }> {
   const parsed = profileSchema.safeParse(raw);

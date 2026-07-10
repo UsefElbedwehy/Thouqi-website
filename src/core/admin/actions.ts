@@ -22,7 +22,7 @@ const productSchema = z.object({
   price: z.string().min(1),
   compareAtPrice: z.string().optional().or(z.literal("")),
   available: z.boolean().default(true),
-  imageUrl: z.string().url().optional().or(z.literal("")),
+  imageUrl: z.string().refine((v) => v === "" || /^(https?:\/\/|\/)/.test(v), "must be a URL or path").optional().or(z.literal("")),
   categoryId: z.string().uuid().optional().or(z.literal("")),
   // Sizes offered (e.g. ["S","M","L"]). Empty = one-size (no size selection).
   sizes: z.array(z.string().min(1)).optional().default([]),
@@ -117,7 +117,7 @@ const categorySchema = z.object({
   parentId: z.string().uuid().optional().or(z.literal("")),
   order: z.coerce.number().int().default(0),
   visible: z.boolean().default(true),
-  imageUrl: z.string().url().optional().or(z.literal("")),
+  imageUrl: z.string().refine((v) => v === "" || /^(https?:\/\/|\/)/.test(v), "must be a URL or path").optional().or(z.literal("")),
 });
 
 export async function saveCategoryAction(raw: unknown): Promise<AdminActionResult> {

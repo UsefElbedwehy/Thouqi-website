@@ -18,7 +18,7 @@ const collectionSchema = z.object({
   titleAr: z.string().min(1),
   subtitleEn: z.string().optional().or(z.literal("")),
   subtitleAr: z.string().optional().or(z.literal("")),
-  bannerImage: z.string().url().optional().or(z.literal("")),
+  bannerImage: z.string().refine((v) => v === "" || /^(https?:\/\/|\/)/.test(v), "must be a URL or path").optional().or(z.literal("")),
   productIds: z.array(z.string().uuid()).default([]),
 });
 

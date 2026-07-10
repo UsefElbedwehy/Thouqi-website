@@ -5,6 +5,7 @@ import { useRouter } from "@/i18n/navigation";
 import { saveProductAction } from "@/core/admin/actions";
 import type { LocalizedText } from "@/config/types";
 import { LocalizedField } from "./LocalizedField";
+import { ImageUploader } from "./ImageUploader";
 import { cn } from "@/lib/utils";
 
 const SIZE_OPTIONS = ["XS", "S", "M", "L", "XL", "XXL"];
@@ -128,10 +129,6 @@ export function ProductForm({
           </select>
         </label>
         <label className="block">
-          <span className="mb-1 block text-xs font-medium text-muted-foreground">Image URL</span>
-          <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} type="url" className={inputClass} />
-        </label>
-        <label className="block">
           <span className="mb-1 block text-xs font-medium text-muted-foreground">Price (KD)</span>
           <input value={price} onChange={(e) => setPrice(e.target.value)} type="number" step="0.001" required className={inputClass} />
         </label>
@@ -140,6 +137,8 @@ export function ProductForm({
           <input value={compareAt} onChange={(e) => setCompareAt(e.target.value)} type="number" step="0.001" className={inputClass} />
         </label>
       </div>
+
+      <ImageUploader value={imageUrl} onChange={setImageUrl} label="Product image" />
 
       <div>
         <p className="mb-1 text-xs font-medium text-muted-foreground">Sizes</p>

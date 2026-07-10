@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { LayoutGrid, Package, MapPin, ShieldCheck } from "lucide-react";
+import { LayoutGrid, Package, MapPin, Lock, ShieldCheck } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { getCurrentUser } from "@/core/auth/user";
 import { SignOutButton } from "./SignOutButton";
@@ -12,6 +12,7 @@ export async function AccountNav() {
     { href: "/account", label: t("overview"), Icon: LayoutGrid },
     { href: "/account/orders", label: t("myOrders"), Icon: Package },
     { href: "/account/addresses", label: t("addresses"), Icon: MapPin },
+    { href: "/account/security", label: t("security"), Icon: Lock },
     ...(user?.profile?.role === "admin"
       ? [{ href: "/admin", label: "Admin Dashboard", Icon: ShieldCheck }]
       : []),
