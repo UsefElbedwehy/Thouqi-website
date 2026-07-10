@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — premium fashion identity.
+ *
+ * Color/radius defaults mirror `site.config.ts` and are (re)written at request
+ * time from the active SiteConfig by <ThemeStyle> for remote rebranding.
+ * Components reference these tokens (via the Tailwind mapping below), never
+ * hardcoded values. `--color-gold` is a static premium hairline accent.
+ */
+:root {
+  --color-primary: #7b1e28; /* deep burgundy */
+  --color-primary-foreground: #fbfaf8;
+  --color-accent: #b23a3a; /* sale / promo */
+  --color-background: #fbfaf8; /* warm ivory */
+  --color-foreground: #1a1614; /* warm near-black */
+  --color-muted: #f2eee9;
+  --color-muted-foreground: #857b70;
+  --color-border: #e7e1d8;
+  --color-success: #2f7d55;
+  --color-success-foreground: #ffffff;
+  --color-gold: #c4a35a; /* champagne accent (static) */
+  --radius: 0.125rem;
+
+  --font-latin: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "Tajawal", ui-sans-serif, sans-serif;
+  --font-display: "Bodoni Moda", "Cormorant Garamond", Georgia, serif;
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-accent: var(--color-accent);
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+  --color-border: var(--color-border);
+  --color-success: var(--color-success);
+  --color-success-foreground: var(--color-success-foreground);
+  --color-gold: var(--color-gold);
+  --radius-base: var(--radius);
+  --font-sans: var(--font-latin);
+  --font-display: var(--font-display);
+
+  /* Motion */
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.6s ease both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes zoom-slow {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Locale-driven font: <html lang> selects the body font stack. */
+html[lang="ar"] body {
+  font-family: var(--font-arabic);
+}
+html[lang="en"] body {
+  font-family: var(--font-latin);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+/* Refined focus ring for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Hide scrollbars on horizontal rails while keeping them scrollable. */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Reveal-on-scroll (progressive enhancement; visible by default without JS). */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.reveal.is-visible {
+  animation: var(--animate-fade-up);
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Elegant animated underline for nav links. */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: var(--underline-origin, center);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-underline:hover::after,
+.group:hover .link-underline::after {
+  transform: scaleX(1);
+}
