@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { redirect, Link } from "@/i18n/navigation";
 import { getAdminUser } from "@/core/admin/guard";
+import { AdminMobileNav } from "@/components/admin/AdminMobileNav";
 
 /**
  * Admin control center shell. Role-gated: non-admins are redirected to the
@@ -53,6 +54,15 @@ export default async function AdminLayout({
 
   return (
     <div className="flex min-h-screen">
+      <AdminMobileNav
+        adminEmail={admin?.email}
+        nav={nav.map(({ href, label, Icon }) => ({
+          href,
+          label,
+          icon: <Icon className="size-4 text-muted-foreground" />,
+        }))}
+      />
+
       <aside className="glass sticky top-0 hidden h-screen w-60 shrink-0 overflow-y-auto rounded-none border-y-0 border-s-0 md:block">
         <div className="border-b border-border p-5">
           <span className="font-display text-xl font-semibold uppercase tracking-wide">Admin</span>
