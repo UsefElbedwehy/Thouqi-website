@@ -127,7 +127,7 @@ export interface PaymentConfig {
     card: boolean;
   };
   /** Selected online gateway provider. `mock` = built-in sandbox for testing. */
-  provider: "knet" | "myfatoorah" | "mock" | null;
+  provider: "knet" | "myfatoorah" | "sadad" | "mock" | null;
 }
 
 export interface SiteConfig {

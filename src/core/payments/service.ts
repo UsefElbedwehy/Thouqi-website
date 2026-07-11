@@ -26,6 +26,8 @@ export const PAYMENT_METHOD_KEYS: Record<PaymentMethodId, string> = {
 export interface PaymentSecretStatus {
   provider: string | null;
   hasKey: boolean;
+  /** SADAD (and any future two-credential gateway) needs a second secret key. */
+  hasSecret: boolean;
   testMode: boolean;
 }
 
@@ -33,36 +35,49 @@ export async function getPaymentSecretStatus(): Promise<PaymentSecretStatus> {
   const db = createSupabaseAdminClient();
   const { data } = await db
     .from("payment_settings")
-    .select("provider, api_key, test_mode")
+    .select("provider, api_key, api_secret, test_mode")
     .eq("id", true)
     .maybeSingle();
   return {
     provider: (data?.provider as string) ?? null,
     hasKey: !!data?.api_key,
+    hasSecret: !!data?.api_secret,
     testMode: (data?.test_mode as boolean) ?? true,
   };
 }
 
-/** Raw gateway secret — SERVER ONLY, used to construct the provider. */
-export async function getPaymentSecret(): Promise<{ key: string | null; provider: string | null; testMode: boolean }> {
+/** Raw gateway secret(s) — SERVER ONLY, used to construct the provider. */
+export async function getPaymentSecret(): Promise<{
+  key: string | null;
+  secret: string | null;
+  provider: string | null;
+  testMode: boolean;
+}> {
   const db = createSupabaseAdminClient();
   const { data } = await db
     .from("payment_settings")
-    .select("provider, api_key, test_mode")
+    .select("provider, api_key, api_secret, test_mode")
     .eq("id", true)
     .maybeSingle();
   return {
     key: (data?.api_key as string) ?? null,
+    secret: (data?.api_secret as string) ?? null,
     provider: (data?.provider as string) ?? null,
     testMode: (data?.test_mode as boolean) ?? true,
   };
 }
 
-/** Online payment is usable only when enabled in config AND a key is stored. */
+/**
+ * Online payment is usable only when enabled in config AND its required
+ * credential(s) are stored. SADAD needs both a client key and a secret key;
+ * other providers only need the single key.
+ */
 export async function isOnlineReady(config: SiteConfig): Promise<boolean> {
   if (!config.payments.onlineEnabled) return false;
-  const { hasKey } = await getPaymentSecretStatus();
-  return hasKey;
+  const { provider, hasKey, hasSecret } = await getPaymentSecretStatus();
+  if (!hasKey) return false;
+  if (provider === "sadad") return hasSecret;
+  return true;
 }
 
 /** The payment methods to offer at checkout for the current configuration. */

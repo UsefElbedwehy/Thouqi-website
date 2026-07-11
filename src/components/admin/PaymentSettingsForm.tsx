@@ -10,9 +10,11 @@ export interface PaymentSettingsInitial {
   cod: boolean;
   knet: boolean;
   card: boolean;
-  provider: "knet" | "myfatoorah" | "mock";
+  provider: "knet" | "myfatoorah" | "sadad" | "mock";
   testMode: boolean;
   hasKey: boolean;
+  /** SADAD needs a second secret key; other providers ignore this. */
+  hasSecret: boolean;
 }
 
 /**
@@ -25,7 +27,7 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
   const [pending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ ...initial, apiKey: "" });
+  const [form, setForm] = useState({ ...initial, apiKey: "", apiSecret: "" });
 
   const inputClass =
     "w-full rounded-[--radius] border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary";
@@ -43,10 +45,17 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
         provider: form.provider,
         testMode: form.testMode,
         apiKey: form.apiKey,
+        apiSecret: form.apiSecret,
       });
       if (r.ok) {
         setSaved(true);
-        setForm((f) => ({ ...f, apiKey: "", hasKey: f.hasKey || !!f.apiKey }));
+        setForm((f) => ({
+          ...f,
+          apiKey: "",
+          apiSecret: "",
+          hasKey: f.hasKey || !!f.apiKey,
+          hasSecret: f.hasSecret || !!f.apiSecret,
+        }));
         router.refresh();
         setTimeout(() => setSaved(false), 2500);
       } else {
@@ -56,6 +65,10 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
   }
 
   const online = form.onlineEnabled;
+  const isSadad = form.provider === "sadad";
+  // SADAD needs both credentials before it's actually usable; other providers
+  // only need the single key.
+  const credentialsReady = form.hasKey && (!isSadad || form.hasSecret);
 
   return (
     <form onSubmit={submit} className="max-w-2xl space-y-8">
@@ -84,7 +97,7 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
             { key: "knet" as const, label: "KNET", needsOnline: true },
             { key: "card" as const, label: "Credit / Debit Card", needsOnline: true },
           ].map(({ key, label, needsOnline }) => {
-            const blocked = needsOnline && (!online || !form.hasKey);
+            const blocked = needsOnline && (!online || !credentialsReady);
             return (
               <label
                 key={key}
@@ -97,7 +110,7 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
                   {label}
                   {needsOnline && (
                     <span className="ms-2 text-xs text-muted-foreground">
-                      {!online ? "(enable online payment)" : !form.hasKey ? "(add a gateway key)" : ""}
+                      {!online ? "(enable online payment)" : !credentialsReady ? "(add a gateway key)" : ""}
                     </span>
                   )}
                 </span>
@@ -121,11 +134,14 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
             <span className="mb-1 block text-xs font-medium text-muted-foreground">Provider</span>
             <select
               value={form.provider}
-              onChange={(e) => setForm((f) => ({ ...f, provider: e.target.value as "knet" | "myfatoorah" | "mock" }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, provider: e.target.value as "knet" | "myfatoorah" | "sadad" | "mock" }))
+              }
               className={inputClass}
             >
               <option value="knet">KNET (via MyFatoorah)</option>
               <option value="myfatoorah">MyFatoorah</option>
+              <option value="sadad">SADAD Pay (KNET, cards, Apple Pay)</option>
               <option value="mock">Sandbox (testing)</option>
             </select>
           </label>
@@ -141,20 +157,37 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
         </div>
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-muted-foreground">
-            API / merchant key {form.hasKey && <span className="text-success">— key on file (leave blank to keep)</span>}
+            {isSadad ? "Client key" : "API / merchant key"}{" "}
+            {form.hasKey && <span className="text-success">— key on file (leave blank to keep)</span>}
           </span>
           <input
             type="password"
             value={form.apiKey}
             onChange={(e) => setForm((f) => ({ ...f, apiKey: e.target.value }))}
-            placeholder={form.hasKey ? "••••••••  (stored)" : "Paste the client's key here"}
+            placeholder={form.hasKey ? "••••••••  (stored)" : isSadad ? "ck_xxxx_xxxxxxxxxxxx" : "Paste the client's key here"}
             className={inputClass}
             autoComplete="off"
           />
-          <span className="mt-1 block text-xs text-muted-foreground">
-            Stored server-side only (never sent to the browser or the public config).
-          </span>
         </label>
+        {isSadad && (
+          <label className="block">
+            <span className="mb-1 block text-xs font-medium text-muted-foreground">
+              Secret key {form.hasSecret && <span className="text-success">— key on file (leave blank to keep)</span>}
+            </span>
+            <input
+              type="password"
+              value={form.apiSecret}
+              onChange={(e) => setForm((f) => ({ ...f, apiSecret: e.target.value }))}
+              placeholder={form.hasSecret ? "••••••••  (stored)" : "Paste the SADAD secret key here"}
+              className={inputClass}
+              autoComplete="off"
+            />
+          </label>
+        )}
+        <span className="block text-xs text-muted-foreground">
+          Stored server-side only (never sent to the browser or the public config).
+          {isSadad && " Webhook URL to set in the SADAD dashboard: /api/payments/sadad-webhook (must stay public — no auth)."}
+        </span>
       </div>
 
       {error && <p className="text-sm text-accent">{error}</p>}

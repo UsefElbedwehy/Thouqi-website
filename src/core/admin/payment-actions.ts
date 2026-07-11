@@ -11,10 +11,12 @@ const schema = z.object({
   cod: z.boolean(),
   knet: z.boolean(),
   card: z.boolean(),
-  provider: z.enum(["knet", "myfatoorah", "mock"]),
+  provider: z.enum(["knet", "myfatoorah", "sadad", "mock"]),
   testMode: z.boolean().default(true),
   // Blank = keep the existing stored key (so admins don't have to re-enter it).
   apiKey: z.string().optional().or(z.literal("")),
+  // SADAD only: second credential (client key uses apiKey above).
+  apiSecret: z.string().optional().or(z.literal("")),
 });
 
 export interface PaymentActionResult {
@@ -47,10 +49,11 @@ export async function savePaymentsAction(raw: unknown): Promise<PaymentActionRes
     return { ok: false, error: (e as Error).message };
   }
 
-  // 2) Secret store (upsert singleton; only set api_key when a new one is given).
+  // 2) Secret store (upsert singleton; only set a key when a new one is given).
   const db = createSupabaseAdminClient();
   const row: Record<string, unknown> = { id: true, provider: d.provider, test_mode: d.testMode };
   if (d.apiKey) row.api_key = d.apiKey;
+  if (d.apiSecret) row.api_secret = d.apiSecret;
   const { error } = await db.from("payment_settings").upsert(row, { onConflict: "id" });
   if (error) return { ok: false, error: error.message };
 

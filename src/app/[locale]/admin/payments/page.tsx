@@ -30,6 +30,7 @@ export default async function AdminPaymentsPage({
           provider: p.provider ?? "knet",
           testMode: secret.testMode,
           hasKey: secret.hasKey,
+          hasSecret: secret.hasSecret,
         }}
       />
     </div>
