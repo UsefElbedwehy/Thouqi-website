@@ -16,8 +16,8 @@ export const defaultSiteConfig: SiteConfig = {
     ar: "أزياء راقية، منتقاة بعناية.",
   },
   logo: {
-    light: "/brand/logo.png",
-    dark: "/brand/logo.png",
+    light: "/brand/logo-transparent.png",
+    dark: "/brand/logo-transparent.png",
     alt: { en: "VEÍAKW", ar: "VEÍAKW" },
   },
   favicon: "/brand/favicon-32.png",
