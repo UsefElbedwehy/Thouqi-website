@@ -51,7 +51,7 @@ export const defaultSiteConfig: SiteConfig = {
   },
 
   contact: {
-    email: "care@thouqi.com",
+    email: "care@veiakw.com",
     phone: "+965 5168 9398",
     whatsapp: "+965 5168 9398",
     address: {

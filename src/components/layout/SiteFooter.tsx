@@ -80,8 +80,8 @@ export async function SiteFooter({
           <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide">{tf("contactUs")}</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>{config.contact.email}</li>
-            <li dir="ltr" className="flex items-center gap-2.5">
-              <span>{config.contact.phone}</span>
+            <li className="flex items-center gap-2.5">
+              <span dir="ltr">{config.contact.phone}</span>
               <span className="flex flex-col gap-1">
                 <a
                   href={`tel:${config.contact.phone.replace(/[^0-9+]/g, "")}`}
