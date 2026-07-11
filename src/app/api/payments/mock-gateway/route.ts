@@ -46,7 +46,7 @@ export async function GET(request: Request) {
   <div class="card">
     <div class="head"><b>KNET · Sandbox</b><span class="badge">TEST MODE</span></div>
     <div class="body">
-      <div class="row"><span>Merchant</span><span>THOUQi</span></div>
+      <div class="row"><span>Merchant</span><span>${config.name.en}</span></div>
       <div class="row"><span>Order</span><span>${ref}</span></div>
       <div class="row total"><span>Amount</span><span>KD${kd}</span></div>
       <div class="btns">
