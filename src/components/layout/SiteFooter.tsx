@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 import { Instagram, Music2, Facebook, Twitter, Youtube } from "lucide-react";
 import type { SiteConfig } from "@/config/types";
 import { t } from "@/lib/format";
@@ -38,7 +39,13 @@ export async function SiteFooter({
     <footer className="mt-16 border-t border-border bg-muted/30">
       <Container className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <span className="font-display text-2xl font-semibold text-foreground">{brand}</span>
+          <Image
+            src={config.logo.light}
+            alt={t(config.logo.alt, locale)}
+            width={273}
+            height={200}
+            className="h-12 w-auto"
+          />
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">{t(config.tagline, locale)}</p>
           <div className="mt-4 flex gap-3">
             {socials.map(({ href, Icon }, i) => (

@@ -10,17 +10,17 @@ import type { SiteConfig } from "./types";
  * it should originate here or from the backend.
  */
 export const defaultSiteConfig: SiteConfig = {
-  name: { en: "THOUQi", ar: "ذوقي" },
+  name: { en: "VEÍAKW", ar: "VEÍAKW" },
   tagline: {
     en: "Premium fashion, curated.",
     ar: "أزياء راقية، منتقاة بعناية.",
   },
   logo: {
-    light: "/brand/logo.svg",
-    dark: "/brand/logo-dark.svg",
-    alt: { en: "THOUQi", ar: "ذوقي" },
+    light: "/brand/logo.png",
+    dark: "/brand/logo.png",
+    alt: { en: "VEÍAKW", ar: "VEÍAKW" },
   },
-  favicon: "/favicon.ico",
+  favicon: "/brand/favicon-32.png",
 
   theme: {
     colors: {

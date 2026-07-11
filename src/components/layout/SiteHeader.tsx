@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 import { Search, Heart, User } from "lucide-react";
 import type { SiteConfig } from "@/config/types";
 import { t } from "@/lib/format";
@@ -81,9 +82,14 @@ export async function SiteHeader({
             className="col-start-2 justify-self-center text-center"
             aria-label={brand}
           >
-            <span className="font-display text-4xl font-semibold uppercase tracking-[0.14em] text-foreground">
-              {brand}
-            </span>
+            <Image
+              src={config.logo.light}
+              alt={t(config.logo.alt, locale)}
+              width={273}
+              height={200}
+              priority
+              className="h-14 w-auto sm:h-16"
+            />
           </Link>
 
           <div className="col-start-3 flex items-center justify-end gap-4">
