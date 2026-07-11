@@ -6,6 +6,7 @@ import { t } from "@/lib/format";
 import { getCurrentUser } from "@/core/auth/user";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/Container";
+import { HeaderShell } from "./HeaderShell";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MegaNav } from "./MegaNav";
 import { AnnouncementBar } from "./AnnouncementBar";
@@ -31,12 +32,14 @@ export async function SiteHeader({
   const user = await getCurrentUser();
 
   return (
-    <header className="sticky top-0 z-40">
-      <AnnouncementBar />
+    <HeaderShell>
+      <div className="overflow-hidden transition-[max-height,opacity] duration-300 ease-out max-h-9 opacity-100 group-data-[scrolled=true]/header:max-h-0 group-data-[scrolled=true]/header:opacity-0">
+        <AnnouncementBar />
+      </div>
 
-      <div className="glass">
+      <div className="glass transition-shadow duration-300 group-data-[scrolled=true]/header:shadow-[0_12px_32px_-16px_rgba(26,22,20,0.28)]">
         {/* Utility row */}
-        <Container className="flex h-9 items-center justify-end gap-5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+        <Container className="flex items-center justify-end gap-5 overflow-hidden text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-[max-height,opacity] duration-300 ease-out max-h-9 opacity-100 group-data-[scrolled=true]/header:max-h-0 group-data-[scrolled=true]/header:opacity-0">
           <LanguageSwitcher locale={locale} />
           <span aria-hidden className="text-border">/</span>
           {user ? (
@@ -56,7 +59,7 @@ export async function SiteHeader({
         </Container>
 
         {/* Brand + search + actions */}
-        <Container className="grid grid-cols-[1fr_auto_1fr] items-center gap-6 py-5">
+        <Container className="grid grid-cols-[1fr_auto_1fr] items-center gap-6 py-5 transition-[padding] duration-300 ease-out group-data-[scrolled=true]/header:py-3">
           <div className="flex items-center">
             <MobileMenuButton />
             <div className="hidden items-center md:flex">
@@ -88,7 +91,7 @@ export async function SiteHeader({
               width={273}
               height={200}
               priority
-              className="h-14 w-auto sm:h-16"
+              className="h-14 w-auto transition-[height] duration-300 ease-out sm:h-16 group-data-[scrolled=true]/header:h-10 group-data-[scrolled=true]/header:sm:h-11"
             />
           </Link>
 
@@ -118,6 +121,6 @@ export async function SiteHeader({
       </div>
 
       <MobileNavDrawer navigation={config.navigation} locale={locale} signedIn={!!user} />
-    </header>
+    </HeaderShell>
   );
 }
