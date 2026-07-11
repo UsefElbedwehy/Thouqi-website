@@ -17,7 +17,10 @@ export async function PromoBannerSection({
 }) {
   const bannerId = section.settings.bannerId as string | undefined;
   const banners = await getBanners();
-  const banner = banners.find((b) => b.id === bannerId) ?? banners[0];
+  // Only render the specifically configured banner — falling back to an
+  // arbitrary active banner risks silently duplicating whatever the hero
+  // (or another section) is already showing.
+  const banner = banners.find((b) => b.id === bannerId);
   if (!banner) return null;
 
   const tc = await getTranslations("common");
