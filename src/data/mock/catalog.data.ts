@@ -46,6 +46,8 @@ export const categories: Category[] = [
   { id: "c-women-activewear", slug: "women-activewear", name: { en: "Activewear", ar: "ملابس رياضية" }, parentId: "c-women", order: 10, visible: true, imageUrl: img("women-activewear") },
   { id: "c-women-swimwear", slug: "women-swimwear", name: { en: "Swimwear", ar: "ملابس البحر" }, parentId: "c-women", order: 11, visible: true, imageUrl: img("women-swimwear") },
   { id: "c-women-shorts", slug: "women-shorts", name: { en: "Shorts", ar: "الشورتات" }, parentId: "c-women", order: 12, visible: true, imageUrl: img("women-shorts") },
+  { id: "c-women-kaftans", slug: "women-kaftans", name: { en: "Kaftans", ar: "القفاطين" }, parentId: "c-women", order: 13, visible: true, imageUrl: img("women-kaftans") },
+  { id: "c-women-abayas", slug: "women-abayas", name: { en: "Abayas", ar: "العبايات" }, parentId: "c-women", order: 14, visible: true, imageUrl: img("women-abayas") },
 
   { id: "c-men", slug: "men", name: { en: "Men", ar: "الرجال" }, parentId: null, order: 1, visible: true, imageUrl: img("men") },
   { id: "c-men-shirts", slug: "men-shirts", name: { en: "Shirts", ar: "القمصان" }, parentId: "c-men", order: 0, visible: true, imageUrl: img("men-shirts") },
@@ -66,6 +68,8 @@ export const categories: Category[] = [
   { id: "c-kids-boys", slug: "kids-boys", name: { en: "Boys", ar: "الأولاد" }, parentId: "c-kids", order: 1, visible: true, imageUrl: img("kids-boys") },
   { id: "c-kids-girls", slug: "kids-girls", name: { en: "Girls", ar: "البنات" }, parentId: "c-kids", order: 2, visible: true, imageUrl: img("kids-girls") },
   { id: "c-kids-bags-accessories-shoes", slug: "kids-bags-accessories-shoes", name: { en: "Bags, Accessories & Shoes", ar: "الشنط والاكسسوارات والاحذية" }, parentId: "c-kids", order: 3, visible: true, imageUrl: img("kids-bags-accessories-shoes") },
+  { id: "c-kids-glasses-accessories", slug: "kids-glasses-accessories", name: { en: "Glasses & Accessories", ar: "النظارات والاكسسوارات" }, parentId: "c-kids", order: 4, visible: true, imageUrl: img("kids-glasses-accessories") },
+  { id: "c-kids-phone-accessories", slug: "kids-phone-accessories", name: { en: "Phone Cases & Accessories", ar: "كفرات ومستلزمات الهاتف" }, parentId: "c-kids", order: 5, visible: true, imageUrl: img("kids-phone-accessories") },
 
   { id: "c-home-decor", slug: "home-decor", name: { en: "Home & Decor", ar: "المنزل والزينة" }, parentId: null, order: 3, visible: true, imageUrl: img("home-decor") },
   { id: "c-home-vases", slug: "home-vases", name: { en: "Vases", ar: "الفازات والمزهريات" }, parentId: "c-home-decor", order: 0, visible: true, imageUrl: img("home-vases") },
@@ -85,6 +89,7 @@ export const categories: Category[] = [
   { id: "c-beauty-bakhoor", slug: "beauty-bakhoor", name: { en: "Bakhoor (Incense)", ar: "البخور" }, parentId: "c-beauty-corner", order: 3, visible: true, imageUrl: img("beauty-bakhoor") },
   { id: "c-beauty-home-fragrances", slug: "beauty-home-fragrances", name: { en: "Home Fragrances", ar: "معطرات المنزل" }, parentId: "c-beauty-corner", order: 4, visible: true, imageUrl: img("beauty-home-fragrances") },
   { id: "c-beauty-hair-tools", slug: "beauty-hair-tools", name: { en: "Hair Tools", ar: "اجهزة الشعر" }, parentId: "c-beauty-corner", order: 5, visible: true, imageUrl: img("beauty-hair-tools") },
+  { id: "c-beauty-gifts", slug: "beauty-gifts", name: { en: "Gifts", ar: "الهدايا" }, parentId: "c-beauty-corner", order: 6, visible: true, imageUrl: img("beauty-gifts") },
 ];
 
 function makeProduct(p: Partial<Product> & Pick<Product, "id" | "slug" | "name" | "brand" | "price" | "images" | "categoryIds">): Product {
@@ -220,6 +225,12 @@ export const collections: Collection[] = [
     title: { en: "Escape in Style", ar: "تألّقي بأناقة" },
     productIds: ["p-white-shirt", "p-sage-set", "p-polka-dress"],
     bannerImage: "/assets/ph/banner.svg",
+  },
+  {
+    id: "col-ready-now", slug: "ready-now",
+    title: { en: "Ready For Immediate Delivery", ar: "جاهز للتوصيل الفوري" },
+    subtitle: { en: "Delivered within 1 day", ar: "التوصيل خلال يوم واحد" },
+    productIds: [],
   },
 ];
 

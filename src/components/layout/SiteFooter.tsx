@@ -80,6 +80,18 @@ export async function SiteFooter({
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>{config.contact.email}</li>
             <li dir="ltr">{config.contact.phone}</li>
+            {config.contact.whatsapp && (
+              <li dir="ltr">
+                <a
+                  href={`https://wa.me/${config.contact.whatsapp.replace(/[^0-9]/g, "")}`}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="hover:text-primary"
+                >
+                  {tf("whatsapp")}: {config.contact.whatsapp}
+                </a>
+              </li>
+            )}
             {config.contact.address && <li>{t(config.contact.address, locale)}</li>}
           </ul>
         </div>

@@ -53,7 +53,7 @@ export const defaultSiteConfig: SiteConfig = {
   contact: {
     email: "care@thouqi.com",
     phone: "+965 0000 0000",
-    whatsapp: "+965 0000 0000",
+    whatsapp: "+965 5168 9398",
     address: {
       en: "Kuwait City, Kuwait",
       ar: "مدينة الكويت، الكويت",
@@ -61,12 +61,18 @@ export const defaultSiteConfig: SiteConfig = {
   },
 
   social: {
-    instagram: "https://instagram.com/thouqi",
-    tiktok: "https://tiktok.com/@thouqi",
+    instagram: "https://instagram.com/veia.kw",
+    tiktok: "https://tiktok.com/@veiakw",
     snapchat: "https://snapchat.com/add/thouqi",
   },
 
   navigation: [
+    {
+      id: "ready-now",
+      label: { en: "Ready For Immediate Delivery", ar: "جاهز للتوصيل الفوري" },
+      href: "/collections/ready-now",
+      highlight: true,
+    },
     {
       id: "women",
       label: { en: "Women", ar: "النساء" },
@@ -88,6 +94,8 @@ export const defaultSiteConfig: SiteConfig = {
             { label: { en: "Activewear", ar: "ملابس رياضية" }, href: "/c/women/women-activewear" },
             { label: { en: "Swimwear", ar: "ملابس البحر" }, href: "/c/women/women-swimwear" },
             { label: { en: "Shorts", ar: "الشورتات" }, href: "/c/women/women-shorts" },
+            { label: { en: "Kaftans", ar: "القفاطين" }, href: "/c/women/women-kaftans" },
+            { label: { en: "Abayas", ar: "العبايات" }, href: "/c/women/women-abayas" },
           ],
         },
       ],
@@ -132,6 +140,8 @@ export const defaultSiteConfig: SiteConfig = {
         {
           links: [
             { label: { en: "Bags, Accessories & Shoes", ar: "الشنط والاكسسوارات والاحذية" }, href: "/c/kids/kids-bags-accessories-shoes" },
+            { label: { en: "Glasses & Accessories", ar: "النظارات والاكسسوارات" }, href: "/c/kids/kids-glasses-accessories" },
+            { label: { en: "Phone Cases & Accessories", ar: "كفرات ومستلزمات الهاتف" }, href: "/c/kids/kids-phone-accessories" },
           ],
         },
       ],
@@ -173,6 +183,7 @@ export const defaultSiteConfig: SiteConfig = {
             { label: { en: "Bakhoor (Incense)", ar: "البخور" }, href: "/c/beauty-corner/beauty-bakhoor" },
             { label: { en: "Home Fragrances", ar: "معطرات المنزل" }, href: "/c/beauty-corner/beauty-home-fragrances" },
             { label: { en: "Hair Tools", ar: "اجهزة الشعر" }, href: "/c/beauty-corner/beauty-hair-tools" },
+            { label: { en: "Gifts", ar: "الهدايا" }, href: "/c/beauty-corner/beauty-gifts" },
           ],
         },
       ],
@@ -241,7 +252,7 @@ export const defaultSiteConfig: SiteConfig = {
   // KNET/MyFatoorah key is added and online payment is switched on in admin.
   payments: {
     onlineEnabled: false,
-    methods: { cod: true, knet: false, card: false },
-    provider: "knet",
+    methods: { cod: true, knet: true, card: true },
+    provider: "myfatoorah",
   },
 };

@@ -20,7 +20,7 @@
     "menu": "Menu",
     "close": "Close",
     "home": "Home",
-    "announcement": "Complimentary shipping on orders over KD30 · Free returns",
+    "announcement": "Complimentary shipping on orders over KD30",
     "newIn": "New In",
     "quickAdd": "Quick Add",
     "discover": "Discover"
@@ -46,7 +46,7 @@
   "product": {
     "details": "Details",
     "sizeAndFit": "Size & Fit",
-    "delivery": "Delivery & Free Returns",
+    "delivery": "Delivery & Returns",
     "shareWithFriends": "Share it with your friends!",
     "now": "Now",
     "outOfStock": "Out of Stock",
@@ -138,6 +138,7 @@
     "paymentPendingBody": "We haven’t received payment confirmation yet. If you completed the payment, your order will update shortly.",
     "backToShopping": "Continue Shopping",
     "emptyCart": "Your bag is empty — add items before checking out.",
+    "noReturnsNotice": "Please review your order carefully before payment — no returns or exchanges.",
     "required": "This field is required",
     "invalidEmail": "Enter a valid email address"
   },
@@ -198,6 +199,7 @@
     "customerService": "Customer Service",
     "aboutUs": "About Us",
     "contactUs": "Contact Us",
+    "whatsapp": "WhatsApp",
     "faq": "FAQ",
     "shipping": "Shipping",
     "returns": "Returns",

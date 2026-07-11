@@ -136,7 +136,11 @@ export default async function ProductDetailPage({
               <p>{t(product.description, locale) || "—"}</p>
             </Accordion>
             <Accordion title={tp("delivery")}>
-              <p>{locale === "ar" ? "شحن خلال ٢–٤ أيام عمل · إرجاع مجاني" : "Shipped in 2–4 business days · Free returns"}</p>
+              <p>
+                {locale === "ar"
+                  ? "توصيل خلال يوم واحد لطلبات الجاهز فوراً · الطلبات الجديدة خلال ٣ إلى ١٠ أيام عمل كحد أقصى · لا يوجد استرجاع أو تبديل"
+                  : "Ready Now orders deliver within 1 day · New orders take up to 3–10 business days · No returns or exchanges"}
+              </p>
             </Accordion>
           </div>
 

@@ -189,6 +189,7 @@ export function CheckoutView({
             <Row label={tco("total")} value={formatPrice(total, locale)} strong />
           </div>
         </dl>
+        <p className="mt-4 text-xs text-muted-foreground">{tco("noReturnsNotice")}</p>
         <button
           type="submit"
           disabled={pending}
