@@ -101,6 +101,11 @@ export const defaultSiteConfig: SiteConfig = {
       ],
     },
     {
+      id: "sunglasses",
+      label: { en: "Sunglasses", ar: "النظارات الشمسية" },
+      href: "/c/sunglasses",
+    },
+    {
       id: "men",
       label: { en: "Men", ar: "الرجال" },
       href: "/c/men",
