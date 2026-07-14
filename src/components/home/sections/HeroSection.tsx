@@ -14,5 +14,5 @@ export async function HeroSection({ locale }: { section: HomeSection; locale: st
 
   const tc = await getTranslations("common");
 
-  return <HeroCarousel banners={banners} locale={locale} discoverLabel={tc("discover")} shopNowLabel={tc("shopNow")} />;
+  return <HeroCarousel banners={banners} locale={locale} shopNowLabel={tc("shopNow")} />;
 }

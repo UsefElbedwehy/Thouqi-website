@@ -20,7 +20,7 @@
     "menu": "القائمة",
     "close": "إغلاق",
     "home": "الرئيسية",
-    "announcement": "شحن مجاني للطلبات فوق ٣٠ د.ك",
+    "announcement": "التوصيل السريع حالياً داخل الكويت فقط ،، يوجد الدفع عند الاستلام",
     "newIn": "وصل حديثاً",
     "quickAdd": "إضافة سريعة",
     "discover": "اكتشفي"
@@ -41,7 +41,7 @@
     "moreNewIn": "المزيد من الجديد",
     "seeMore": "عرض المزيد",
     "featuredCollections": "تشكيلات مميزة",
-    "shopByCategory": "تسوّقي حسب الفئة"
+    "shopByCategory": "تسوّق حسب الفئة"
   },
   "product": {
     "details": "التفاصيل",
@@ -198,7 +198,7 @@
   "footer": {
     "customerService": "خدمة العملاء",
     "aboutUs": "من نحن",
-    "contactUs": "اتصلي بنا",
+    "contactUs": "اتصل بنا",
     "call": "اتصال",
     "whatsapp": "واتساب",
     "faq": "الأسئلة الشائعة",

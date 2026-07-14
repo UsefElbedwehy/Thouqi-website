@@ -18,12 +18,10 @@ const AUTOPLAY_MS = 6000;
 export function HeroCarousel({
   banners,
   locale,
-  discoverLabel,
   shopNowLabel,
 }: {
   banners: Banner[];
   locale: string;
-  discoverLabel: string;
   shopNowLabel: string;
 }) {
   const [index, setIndex] = useState(0);
@@ -73,9 +71,6 @@ export function HeroCarousel({
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-black/10" />
 
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 text-center text-white">
-            <span className="animate-fade-up text-xs font-medium uppercase tracking-[0.4em] text-white/80">
-              {discoverLabel}
-            </span>
             <h1 className="max-w-3xl font-display text-5xl font-semibold uppercase leading-[1.05] tracking-[0.06em] drop-shadow-sm sm:text-7xl">
               {t(b.title, locale)}
             </h1>

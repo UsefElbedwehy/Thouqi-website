@@ -13,7 +13,10 @@ export const routing = defineRouting({
   defaultLocale: "ar",
   // Always show the locale prefix (/ar, /en) for clean, SEO-friendly localized URLs + hreflang.
   localePrefix: "always",
-  localeDetection: true,
+  // Kuwait-based, Arabic-first store: always default to Arabic regardless of
+  // the visitor's browser language, rather than letting Accept-Language pick
+  // English for phones set to an English OS/browser locale.
+  localeDetection: false,
 });
 
 export type AppLocale = (typeof routing.locales)[number];

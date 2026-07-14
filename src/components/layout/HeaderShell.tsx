@@ -53,7 +53,11 @@ export function HeaderShell({ children }: { children: ReactNode }) {
       data-scrolled={scrolled}
       data-hidden={hidden}
       className={cn(
-        "group/header sticky top-0 z-40 transition-transform duration-300 ease-out will-change-transform",
+        // No will-change-transform here: it makes this element a CSS containing
+        // block for any `position: fixed` descendant (the mobile nav drawer is
+        // one), trapping the drawer to the header's own height instead of the
+        // full viewport.
+        "group/header sticky top-0 z-40 transition-transform duration-300 ease-out",
         "data-[hidden=true]:-translate-y-full",
       )}
     >

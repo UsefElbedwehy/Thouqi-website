@@ -27,7 +27,7 @@ export async function CategoryGridSection({
   return (
     <section className="py-16">
       <Container>
-        <SectionHeading kicker={tc("discover")} title={th("shopByCategory")} />
+        <SectionHeading title={th("shopByCategory")} />
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
           {categories.map((c) => (
             <Link

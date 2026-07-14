@@ -12,8 +12,8 @@ import type { SiteConfig } from "./types";
 export const defaultSiteConfig: SiteConfig = {
   name: { en: "VEÍAKW", ar: "VEÍAKW" },
   tagline: {
-    en: "Premium fashion, curated.",
-    ar: "أزياء راقية، منتقاة بعناية.",
+    en: "A store selling everything elegant, unique, and exceptional.",
+    ar: "متجر لبيع كُل ما هو أنيق ، فريد ، وإستثنائي.",
   },
   logo: {
     light: "/brand/logo-transparent.png",
@@ -51,7 +51,7 @@ export const defaultSiteConfig: SiteConfig = {
   },
 
   contact: {
-    email: "care@veiakw.com",
+    email: "veeiakw@gmail.com",
     phone: "+965 5168 9398",
     whatsapp: "+965 5168 9398",
     address: {

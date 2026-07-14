@@ -1,6 +1,6 @@
-<svg viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fashion">
+<svg viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VEÍAKW">
   <rect width="600" height="800" fill="#FBFAF8"/>
   <rect x="26" y="26" width="548" height="748" fill="none" stroke="#C4A35A" stroke-opacity="0.55" stroke-width="1.5"/>
-  <text x="300" y="430" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="220" fill="#7B1E28" fill-opacity="0.14">F</text>
-  <text x="300" y="560" text-anchor="middle" font-family="Georgia, serif" font-size="30" letter-spacing="16" fill="#1A1614" fill-opacity="0.5">FASHION</text>
+  <text x="300" y="430" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="220" fill="#7B1E28" fill-opacity="0.14">V</text>
+  <text x="300" y="560" text-anchor="middle" font-family="Georgia, serif" font-size="30" letter-spacing="14" fill="#1A1614" fill-opacity="0.5">VEÍAKW</text>
 </svg>
