@@ -106,6 +106,11 @@ export const defaultSiteConfig: SiteConfig = {
       href: "/c/sunglasses",
     },
     {
+      id: "phone-accessories",
+      label: { en: "Phone Accessories", ar: "اكسسوارات الهاتف" },
+      href: "/c/phone-accessories",
+    },
+    {
       id: "men",
       label: { en: "Men", ar: "الرجال" },
       href: "/c/men",
@@ -188,10 +193,14 @@ export const defaultSiteConfig: SiteConfig = {
             { label: { en: "Bakhoor (Incense)", ar: "البخور" }, href: "/c/beauty-corner/beauty-bakhoor" },
             { label: { en: "Home Fragrances", ar: "معطرات المنزل" }, href: "/c/beauty-corner/beauty-home-fragrances" },
             { label: { en: "Hair Tools", ar: "اجهزة الشعر" }, href: "/c/beauty-corner/beauty-hair-tools" },
-            { label: { en: "Gifts", ar: "الهدايا" }, href: "/c/beauty-corner/beauty-gifts" },
           ],
         },
       ],
+    },
+    {
+      id: "gifts",
+      label: { en: "Gifts", ar: "الهدايا" },
+      href: "/c/gifts",
     },
   ],
 
@@ -254,11 +263,10 @@ export const defaultSiteConfig: SiteConfig = {
   },
 
   // Online payment is switched on, but KNET/card only actually appear at
-  // checkout once a gateway key is on file (Admin > Payments) — until then
-  // this safely stays Cash on Delivery only. See resolveCheckoutMethods().
+  // checkout once SADAD_CLIENT_KEY/SADAD_SECRET_KEY are set (env vars) —
+  // until then this safely stays Cash on Delivery only. See resolveCheckoutMethods().
   payments: {
     onlineEnabled: true,
     methods: { cod: true, knet: true, card: true },
-    provider: "myfatoorah",
   },
 };

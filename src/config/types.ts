@@ -114,20 +114,19 @@ export interface FeatureFlags {
 
 /**
  * PUBLIC payment configuration — safe to render client-side. Controls WHICH
- * methods appear at checkout. The gateway secret key is NOT here: it lives in
- * the server-only `payment_settings` table (see docs/PAYMENTS not in config).
+ * methods appear at checkout. SADAD Pay is the store's only gateway and its
+ * credentials live exclusively in environment variables (SADAD_CLIENT_KEY /
+ * SADAD_SECRET_KEY) — never here, never in the database.
  */
 export interface PaymentConfig {
   /** Master switch for online (gateway) payment. Off = COD-only, deployable now. */
   onlineEnabled: boolean;
-  /** Which methods are offered. `cod` needs no gateway; others need the key. */
+  /** Which methods are offered. `cod` needs no gateway; knet/card need SADAD configured. */
   methods: {
     cod: boolean;
     knet: boolean;
     card: boolean;
   };
-  /** Selected online gateway provider. `mock` = built-in sandbox for testing. */
-  provider: "knet" | "myfatoorah" | "sadad" | "mock" | null;
 }
 
 export interface SiteConfig {

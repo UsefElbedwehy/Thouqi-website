@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getPaymentSecret } from "@/core/payments/service";
 import { SadadProvider } from "@/core/payments/providers/sadad";
 import { getOrderForPayment, markOrderPaid } from "@/core/orders/service";
 import { SITE_URL } from "@/lib/seo";
@@ -7,9 +6,8 @@ import { SITE_URL } from "@/lib/seo";
 /**
  * Belt-and-braces fallback for the SADAD "Payment Success Return URL" /
  * "Payment Failed Return URL" (set once in the SADAD merchant dashboard —
- * unlike MyFatoorah, SADAD's invoice API takes no per-invoice callback URL,
- * so this can't rely on our own `?order=` query param the way
- * /api/payments/callback does for other providers).
+ * SADAD's invoice API takes no per-invoice callback URL, so this can't rely
+ * on a `?order=` query param the way a per-invoice redirect would).
  *
  * The webhook (/api/payments/sadad-webhook) is the authoritative source of
  * truth; this route only covers the case where the shopper's browser makes it
@@ -29,10 +27,9 @@ export async function GET(request: Request) {
   if (!invoiceId) return fallback;
 
   try {
-    const { key, secret, provider, testMode } = await getPaymentSecret();
-    if (provider !== "sadad" || !key || !secret) return fallback;
+    if (!SadadProvider.isConfigured()) return fallback;
 
-    const sadad = new SadadProvider(key, secret, testMode);
+    const sadad = new SadadProvider();
     const details = await sadad.getInvoiceDetails(invoiceId);
     if (!details?.refNumber) return fallback;
 

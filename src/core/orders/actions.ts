@@ -7,7 +7,6 @@ import { getSiteConfig } from "@/config";
 import { resolveCheckoutMethods } from "@/core/payments/service";
 import { getProvider } from "@/core/payments/gateway";
 import { shippingPrice } from "./types";
-import { SITE_URL } from "@/lib/seo";
 import type { PlaceOrderResult } from "./types";
 
 /**
@@ -64,8 +63,6 @@ export async function placeOrder(raw: unknown): Promise<PlaceOrderResult> {
       customerName: parsed.data.fullName,
       customerEmail: parsed.data.email,
       locale,
-      callbackUrl: `${SITE_URL}/api/payments/callback?order=${id}&locale=${locale}`,
-      webhookUrl: `${SITE_URL}/api/payments/webhook`,
     });
     await setOrderPaymentRef(id, init.paymentRef, provider.id);
     return { ok: true, orderNumber: reference, redirectUrl: init.redirectUrl };

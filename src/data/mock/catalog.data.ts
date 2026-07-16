@@ -51,7 +51,9 @@ export const categories: Category[] = [
 
   { id: "c-sunglasses", slug: "sunglasses", name: { en: "Sunglasses", ar: "النظارات الشمسية" }, parentId: null, order: 1, visible: true, imageUrl: img("sunglasses") },
 
-  { id: "c-men", slug: "men", name: { en: "Men", ar: "الرجال" }, parentId: null, order: 2, visible: true, imageUrl: img("men") },
+  { id: "c-phone-accessories", slug: "phone-accessories", name: { en: "Phone Accessories", ar: "اكسسوارات الهاتف" }, parentId: null, order: 2, visible: true, imageUrl: img("phone-accessories") },
+
+  { id: "c-men", slug: "men", name: { en: "Men", ar: "الرجال" }, parentId: null, order: 3, visible: true, imageUrl: img("men") },
   { id: "c-men-shirts", slug: "men-shirts", name: { en: "Shirts", ar: "القمصان" }, parentId: "c-men", order: 0, visible: true, imageUrl: img("men-shirts") },
   { id: "c-men-tshirts", slug: "men-tshirts", name: { en: "T-Shirts", ar: "التيشيرتات" }, parentId: "c-men", order: 1, visible: true, imageUrl: img("men-tshirts") },
   { id: "c-men-jeans", slug: "men-jeans", name: { en: "Jeans", ar: "الجينز" }, parentId: "c-men", order: 2, visible: true, imageUrl: img("men-jeans") },
@@ -65,7 +67,7 @@ export const categories: Category[] = [
   { id: "c-men-swimwear", slug: "men-swimwear", name: { en: "Swimwear", ar: "ملابس البحر" }, parentId: "c-men", order: 10, visible: true, imageUrl: img("men-swimwear") },
   { id: "c-men-shorts", slug: "men-shorts", name: { en: "Shorts", ar: "الشورتات" }, parentId: "c-men", order: 11, visible: true, imageUrl: img("men-shorts") },
 
-  { id: "c-kids", slug: "kids", name: { en: "Kids", ar: "الأطفال" }, parentId: null, order: 3, visible: true, imageUrl: img("kids") },
+  { id: "c-kids", slug: "kids", name: { en: "Kids", ar: "الأطفال" }, parentId: null, order: 4, visible: true, imageUrl: img("kids") },
   { id: "c-kids-infants", slug: "kids-infants", name: { en: "Infants", ar: "الأطفال الرضع" }, parentId: "c-kids", order: 0, visible: true, imageUrl: img("kids-infants") },
   { id: "c-kids-boys", slug: "kids-boys", name: { en: "Boys", ar: "الأولاد" }, parentId: "c-kids", order: 1, visible: true, imageUrl: img("kids-boys") },
   { id: "c-kids-girls", slug: "kids-girls", name: { en: "Girls", ar: "البنات" }, parentId: "c-kids", order: 2, visible: true, imageUrl: img("kids-girls") },
@@ -73,7 +75,7 @@ export const categories: Category[] = [
   { id: "c-kids-glasses-accessories", slug: "kids-glasses-accessories", name: { en: "Glasses & Accessories", ar: "النظارات والاكسسوارات" }, parentId: "c-kids", order: 4, visible: true, imageUrl: img("kids-glasses-accessories") },
   { id: "c-kids-phone-accessories", slug: "kids-phone-accessories", name: { en: "Phone Cases & Accessories", ar: "كفرات ومستلزمات الهاتف" }, parentId: "c-kids", order: 5, visible: true, imageUrl: img("kids-phone-accessories") },
 
-  { id: "c-home-decor", slug: "home-decor", name: { en: "Home & Decor", ar: "المنزل والزينة" }, parentId: null, order: 4, visible: true, imageUrl: img("home-decor") },
+  { id: "c-home-decor", slug: "home-decor", name: { en: "Home & Decor", ar: "المنزل والزينة" }, parentId: null, order: 5, visible: true, imageUrl: img("home-decor") },
   { id: "c-home-vases", slug: "home-vases", name: { en: "Vases", ar: "الفازات والمزهريات" }, parentId: "c-home-decor", order: 0, visible: true, imageUrl: img("home-vases") },
   { id: "c-home-plates-bowls", slug: "home-plates-bowls", name: { en: "Plates & Bowls", ar: "الأطباق والأوعية" }, parentId: "c-home-decor", order: 1, visible: true, imageUrl: img("home-plates-bowls") },
   { id: "c-home-serving-dishes", slug: "home-serving-dishes", name: { en: "Serving Dishes", ar: "أواني تقديم الطعام" }, parentId: "c-home-decor", order: 2, visible: true, imageUrl: img("home-serving-dishes") },
@@ -84,14 +86,15 @@ export const categories: Category[] = [
   { id: "c-home-photo-albums-frames", slug: "home-photo-albums-frames", name: { en: "Photo Albums & Frames", ar: "ألبومات وإطارات الصور" }, parentId: "c-home-decor", order: 7, visible: true, imageUrl: img("home-photo-albums-frames") },
   { id: "c-home-sculptures-decorative-bowls", slug: "home-sculptures-decorative-bowls", name: { en: "Sculptures & Decorative Bowls", ar: "المنحوتات والأوعية الزخرفية" }, parentId: "c-home-decor", order: 8, visible: true, imageUrl: img("home-sculptures-decorative-bowls") },
 
-  { id: "c-beauty-corner", slug: "beauty-corner", name: { en: "Beauty Corner", ar: "ركن الجمال" }, parentId: null, order: 5, visible: true, imageUrl: img("beauty-corner") },
+  { id: "c-beauty-corner", slug: "beauty-corner", name: { en: "Beauty Corner", ar: "ركن الجمال" }, parentId: null, order: 6, visible: true, imageUrl: img("beauty-corner") },
   { id: "c-beauty-perfumes", slug: "beauty-perfumes", name: { en: "Perfumes", ar: "العطور" }, parentId: "c-beauty-corner", order: 0, visible: true, imageUrl: img("beauty-perfumes") },
   { id: "c-beauty-makeup", slug: "beauty-makeup", name: { en: "Makeup", ar: "الميك أب" }, parentId: "c-beauty-corner", order: 1, visible: true, imageUrl: img("beauty-makeup") },
   { id: "c-beauty-lotion", slug: "beauty-lotion", name: { en: "Lotion", ar: "اللوشن" }, parentId: "c-beauty-corner", order: 2, visible: true, imageUrl: img("beauty-lotion") },
   { id: "c-beauty-bakhoor", slug: "beauty-bakhoor", name: { en: "Bakhoor (Incense)", ar: "البخور" }, parentId: "c-beauty-corner", order: 3, visible: true, imageUrl: img("beauty-bakhoor") },
   { id: "c-beauty-home-fragrances", slug: "beauty-home-fragrances", name: { en: "Home Fragrances", ar: "معطرات المنزل" }, parentId: "c-beauty-corner", order: 4, visible: true, imageUrl: img("beauty-home-fragrances") },
   { id: "c-beauty-hair-tools", slug: "beauty-hair-tools", name: { en: "Hair Tools", ar: "اجهزة الشعر" }, parentId: "c-beauty-corner", order: 5, visible: true, imageUrl: img("beauty-hair-tools") },
-  { id: "c-beauty-gifts", slug: "beauty-gifts", name: { en: "Gifts", ar: "الهدايا" }, parentId: "c-beauty-corner", order: 6, visible: true, imageUrl: img("beauty-gifts") },
+
+  { id: "c-gifts", slug: "gifts", name: { en: "Gifts", ar: "الهدايا" }, parentId: null, order: 7, visible: true, imageUrl: img("gifts") },
 ];
 
 function makeProduct(p: Partial<Product> & Pick<Product, "id" | "slug" | "name" | "brand" | "price" | "images" | "categoryIds">): Product {

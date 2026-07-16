@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { savePaymentsAction } from "@/core/admin/payment-actions";
 import { cn } from "@/lib/utils";
@@ -10,52 +11,42 @@ export interface PaymentSettingsInitial {
   cod: boolean;
   knet: boolean;
   card: boolean;
-  provider: "knet" | "myfatoorah" | "sadad" | "mock";
-  testMode: boolean;
-  hasKey: boolean;
-  /** SADAD needs a second secret key; other providers ignore this. */
-  hasSecret: boolean;
+}
+
+export interface SadadStatus {
+  hasClientKey: boolean;
+  hasSecretKey: boolean;
+  isSandbox: boolean;
+  baseUrl: string;
 }
 
 /**
- * Admin payment configuration. Toggles online payment + methods (public config)
- * and stores the gateway secret key (server-only). Deploy with online OFF, then
- * paste the client's key and switch it on — no redeploy.
+ * Admin payment configuration. SADAD is the store's only gateway and its
+ * credentials are environment-variable-only (SADAD_CLIENT_KEY /
+ * SADAD_SECRET_KEY) — this form only ever toggles the public config (online
+ * switch + which methods show); it never collects or displays secrets.
  */
-export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsInitial }) {
+export function PaymentSettingsForm({
+  initial,
+  sadad,
+}: {
+  initial: PaymentSettingsInitial;
+  sadad: SadadStatus;
+}) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ ...initial, apiKey: "", apiSecret: "" });
-
-  const inputClass =
-    "w-full rounded-[--radius] border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary";
+  const [form, setForm] = useState(initial);
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setSaved(false);
     startTransition(async () => {
-      const r = await savePaymentsAction({
-        onlineEnabled: form.onlineEnabled,
-        cod: form.cod,
-        knet: form.knet,
-        card: form.card,
-        provider: form.provider,
-        testMode: form.testMode,
-        apiKey: form.apiKey,
-        apiSecret: form.apiSecret,
-      });
+      const r = await savePaymentsAction(form);
       if (r.ok) {
         setSaved(true);
-        setForm((f) => ({
-          ...f,
-          apiKey: "",
-          apiSecret: "",
-          hasKey: f.hasKey || !!f.apiKey,
-          hasSecret: f.hasSecret || !!f.apiSecret,
-        }));
         router.refresh();
         setTimeout(() => setSaved(false), 2500);
       } else {
@@ -65,10 +56,7 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
   }
 
   const online = form.onlineEnabled;
-  const isSadad = form.provider === "sadad";
-  // SADAD needs both credentials before it's actually usable; other providers
-  // only need the single key.
-  const credentialsReady = form.hasKey && (!isSadad || form.hasSecret);
+  const sadadReady = sadad.hasClientKey && sadad.hasSecretKey;
 
   return (
     <form onSubmit={submit} className="max-w-2xl space-y-8">
@@ -77,7 +65,7 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
         <span>
           <span className="block text-sm font-medium">Online payment</span>
           <span className="block text-xs text-muted-foreground">
-            Off = Cash on Delivery only (safe to deploy without a gateway key).
+            Off = Cash on Delivery only (safe to deploy without SADAD configured).
           </span>
         </span>
         <input
@@ -97,7 +85,7 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
             { key: "knet" as const, label: "KNET", needsOnline: true },
             { key: "card" as const, label: "Credit / Debit Card", needsOnline: true },
           ].map(({ key, label, needsOnline }) => {
-            const blocked = needsOnline && (!online || !credentialsReady);
+            const blocked = needsOnline && (!online || !sadadReady);
             return (
               <label
                 key={key}
@@ -110,7 +98,7 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
                   {label}
                   {needsOnline && (
                     <span className="ms-2 text-xs text-muted-foreground">
-                      {!online ? "(enable online payment)" : !credentialsReady ? "(add a gateway key)" : ""}
+                      {!online ? "(enable online payment)" : !sadadReady ? "(SADAD not configured)" : ""}
                     </span>
                   )}
                 </span>
@@ -126,68 +114,25 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
         </div>
       </div>
 
-      {/* Gateway */}
-      <div className={cn("space-y-4", !online && "opacity-60")}>
-        <h2 className="text-sm font-bold uppercase tracking-wide">Gateway</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label className="block">
-            <span className="mb-1 block text-xs font-medium text-muted-foreground">Provider</span>
-            <select
-              value={form.provider}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, provider: e.target.value as "knet" | "myfatoorah" | "sadad" | "mock" }))
-              }
-              className={inputClass}
-            >
-              <option value="knet">KNET (via MyFatoorah)</option>
-              <option value="myfatoorah">MyFatoorah</option>
-              <option value="sadad">SADAD Pay (KNET, cards, Apple Pay)</option>
-              <option value="mock">Sandbox (testing)</option>
-            </select>
-          </label>
-          <label className="flex items-end gap-2 pb-2 text-sm">
-            <input
-              type="checkbox"
-              checked={form.testMode}
-              onChange={(e) => setForm((f) => ({ ...f, testMode: e.target.checked }))}
-              className="size-4"
-            />
-            Test / sandbox mode
-          </label>
+      {/* SADAD status — read-only, no secrets ever shown or entered here */}
+      <div>
+        <h2 className="mb-3 text-sm font-bold uppercase tracking-wide">Gateway — SADAD Pay</h2>
+        <div className="space-y-2 rounded-[--radius] border border-border p-4 text-sm">
+          <StatusRow label="Client key" ok={sadad.hasClientKey} />
+          <StatusRow label="Secret key" ok={sadad.hasSecretKey} />
+          <div className="flex items-center justify-between border-t border-border pt-2 text-xs text-muted-foreground">
+            <span>Mode</span>
+            <span>{sadad.isSandbox ? "Sandbox" : "Live"}</span>
+          </div>
         </div>
-        <label className="block">
-          <span className="mb-1 block text-xs font-medium text-muted-foreground">
-            {isSadad ? "Client key" : "API / merchant key"}{" "}
-            {form.hasKey && <span className="text-success">— key on file (leave blank to keep)</span>}
-          </span>
-          <input
-            type="password"
-            value={form.apiKey}
-            onChange={(e) => setForm((f) => ({ ...f, apiKey: e.target.value }))}
-            placeholder={form.hasKey ? "••••••••  (stored)" : isSadad ? "ck_xxxx_xxxxxxxxxxxx" : "Paste the client's key here"}
-            className={inputClass}
-            autoComplete="off"
-          />
-        </label>
-        {isSadad && (
-          <label className="block">
-            <span className="mb-1 block text-xs font-medium text-muted-foreground">
-              Secret key {form.hasSecret && <span className="text-success">— key on file (leave blank to keep)</span>}
-            </span>
-            <input
-              type="password"
-              value={form.apiSecret}
-              onChange={(e) => setForm((f) => ({ ...f, apiSecret: e.target.value }))}
-              placeholder={form.hasSecret ? "••••••••  (stored)" : "Paste the SADAD secret key here"}
-              className={inputClass}
-              autoComplete="off"
-            />
-          </label>
-        )}
-        <span className="block text-xs text-muted-foreground">
-          Stored server-side only (never sent to the browser or the public config).
-          {isSadad && " Webhook URL to set in the SADAD dashboard: /api/payments/sadad-webhook (must stay public — no auth)."}
-        </span>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Set via environment variables, not here: <code>SADAD_CLIENT_KEY</code>,{" "}
+          <code>SADAD_SECRET_KEY</code>, and optionally <code>SADAD_BASE_URL</code> (omit for
+          live, set to <code>https://apisandbox.sadadpay.net</code> for sandbox). Changing them
+          requires a redeploy. In the SADAD merchant dashboard, set the WebhookURL to{" "}
+          <code>/api/payments/sadad-webhook</code> (must stay public — no auth) and the
+          Success/Fail Return URLs to <code>/api/payments/sadad-return</code>.
+        </p>
       </div>
 
       {error && <p className="text-sm text-accent">{error}</p>}
@@ -203,5 +148,22 @@ export function PaymentSettingsForm({ initial }: { initial: PaymentSettingsIniti
         {saved && <span className="text-sm text-success">Saved.</span>}
       </div>
     </form>
+  );
+}
+
+function StatusRow({ label, ok }: { label: string; ok: boolean }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span>{label}</span>
+      {ok ? (
+        <span className="flex items-center gap-1.5 text-success">
+          <CheckCircle2 className="size-4" /> Configured
+        </span>
+      ) : (
+        <span className="flex items-center gap-1.5 text-muted-foreground">
+          <XCircle className="size-4" /> Missing
+        </span>
+      )}
+    </div>
   );
 }

@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getPaymentSecret } from "@/core/payments/service";
 import { SadadProvider } from "@/core/payments/providers/sadad";
 import { markOrderPaid } from "@/core/orders/service";
 
@@ -26,10 +25,9 @@ export async function POST(request: Request) {
   if (!invoiceId) return NextResponse.json({ ok: true });
 
   try {
-    const { key, secret, provider, testMode } = await getPaymentSecret();
-    if (provider !== "sadad" || !key || !secret) return NextResponse.json({ ok: true });
+    if (!SadadProvider.isConfigured()) return NextResponse.json({ ok: true });
 
-    const sadad = new SadadProvider(key, secret, testMode);
+    const sadad = new SadadProvider();
     const details = await sadad.getInvoiceDetails(String(invoiceId));
     if (details?.status === "paid" && details.refNumber) {
       // markOrderPaid only transitions pending -> paid, so SADAD's webhook

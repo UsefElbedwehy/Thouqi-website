@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { readAdminConfig } from "@/core/admin/config-service";
-import { getPaymentSecretStatus } from "@/core/payments/service";
+import { SadadProvider } from "@/core/payments/providers/sadad";
 import { PaymentSettingsForm } from "@/components/admin/PaymentSettingsForm";
 
 export default async function AdminPaymentsPage({
@@ -11,15 +11,16 @@ export default async function AdminPaymentsPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [config, secret] = await Promise.all([readAdminConfig(), getPaymentSecretStatus()]);
+  const config = await readAdminConfig();
   const p = config.payments;
+  const sadad = SadadProvider.status();
 
   return (
     <div>
       <h1 className="mb-2 font-display text-3xl font-semibold uppercase tracking-[0.06em]">Payments</h1>
       <p className="mb-8 text-sm text-muted-foreground">
-        Control which payment methods appear at checkout and store the gateway key.
-        The store ships COD-only until you switch online payment on.
+        Control which payment methods appear at checkout. The store ships COD-only until
+        online payment is on and SADAD is configured.
       </p>
       <PaymentSettingsForm
         initial={{
@@ -27,11 +28,8 @@ export default async function AdminPaymentsPage({
           cod: p.methods.cod,
           knet: p.methods.knet,
           card: p.methods.card,
-          provider: p.provider ?? "knet",
-          testMode: secret.testMode,
-          hasKey: secret.hasKey,
-          hasSecret: secret.hasSecret,
         }}
+        sadad={sadad}
       />
     </div>
   );

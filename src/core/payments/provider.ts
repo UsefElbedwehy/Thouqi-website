@@ -3,9 +3,10 @@
  *
  * A `PaymentProvider` knows how to (1) initiate a hosted payment and return the
  * URL to redirect the shopper to, and (2) verify a payment's final status
- * server-side (never trusting the browser redirect). Concrete providers:
- *   - MyFatoorahProvider — real KNET/card via the MyFatoorah aggregator.
- *   - MockGatewayProvider — built-in sandbox for local/testing.
+ * server-side (never trusting the browser redirect). SADAD Pay is the store's
+ * only concrete provider (`SadadProvider`) — its return/webhook URLs are set
+ * once in the SADAD merchant dashboard rather than passed per-invoice, so
+ * they aren't part of this interface.
  */
 
 export interface InitiatePaymentInput {
@@ -16,10 +17,6 @@ export interface InitiatePaymentInput {
   customerName: string;
   customerEmail: string;
   locale: string;
-  /** Browser is redirected here after payment (we re-verify + finalize). */
-  callbackUrl: string;
-  /** Server-to-server confirmation endpoint (idempotent). */
-  webhookUrl: string;
 }
 
 export interface InitiateResult {

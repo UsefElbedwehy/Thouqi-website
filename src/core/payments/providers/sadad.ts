@@ -12,12 +12,19 @@ import type {
  * token, cached in-process); invoices are created server-side with the
  * server-computed order total (never a client-supplied amount).
  *
+ * SADAD is the only gateway this store integrates, and its credentials live
+ * exclusively in environment variables (SADAD_CLIENT_KEY, SADAD_SECRET_KEY,
+ * optional SADAD_BASE_URL for sandbox testing) — never in the database or an
+ * admin-editable field, so they never pass through the app's own auth surface.
+ *
  * `ref_Number` on the invoice is set to our internal order id, so a webhook
  * carrying only `InvoiceId` can resolve back to `getInvoiceDetails().refNumber`
  * without a separate lookup. Docs: https://sadadpay.net (merchant dashboard).
  */
 export class SadadProvider implements PaymentProvider {
   readonly id = "sadad";
+  private clientKey: string;
+  private secretKey: string;
   private baseUrl: string;
   private payHost: string;
 
@@ -27,13 +34,29 @@ export class SadadProvider implements PaymentProvider {
   // common case.
   private static cached: { token: string; exp: number } | null = null;
 
-  constructor(
-    private clientKey: string,
-    private secretKey: string,
-    testMode: boolean,
-  ) {
-    this.baseUrl = testMode ? "https://apisandbox.sadadpay.net" : "https://api.sadadpay.net";
-    this.payHost = testMode ? "https://sandbox.sadadpay.net" : "https://sadadpay.net";
+  constructor() {
+    // A stray newline from pasting/env-loading breaks Basic auth silently and
+    // surfaces as the same WrongClientKeyOrClientSecret error as a bad key.
+    this.clientKey = (process.env.SADAD_CLIENT_KEY ?? "").trim();
+    this.secretKey = (process.env.SADAD_SECRET_KEY ?? "").trim();
+    this.baseUrl = (process.env.SADAD_BASE_URL ?? "https://api.sadadpay.net").trim();
+    this.payHost = this.baseUrl.includes("sandbox") ? "https://sandbox.sadadpay.net" : "https://sadadpay.net";
+  }
+
+  /** True once both credentials are present — checked before ever constructing a provider. */
+  static isConfigured(): boolean {
+    return !!process.env.SADAD_CLIENT_KEY?.trim() && !!process.env.SADAD_SECRET_KEY?.trim();
+  }
+
+  /** Read-only status for the admin UI — never exposes the actual secret values. */
+  static status(): { hasClientKey: boolean; hasSecretKey: boolean; isSandbox: boolean; baseUrl: string } {
+    const baseUrl = (process.env.SADAD_BASE_URL ?? "https://api.sadadpay.net").trim();
+    return {
+      hasClientKey: !!process.env.SADAD_CLIENT_KEY?.trim(),
+      hasSecretKey: !!process.env.SADAD_SECRET_KEY?.trim(),
+      isSandbox: baseUrl.includes("sandbox"),
+      baseUrl,
+    };
   }
 
   /** Basic → refresh token → access token. Auth failures come back as HTTP 200
