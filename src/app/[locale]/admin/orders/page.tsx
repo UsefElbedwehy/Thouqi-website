@@ -3,6 +3,7 @@ import { listAdminOrders } from "@/core/admin/service";
 import { formatPrice } from "@/lib/format";
 import { Link } from "@/i18n/navigation";
 import { OrderStatusBadge } from "@/components/account/OrderStatusBadge";
+import { DeleteOrderButton } from "@/components/admin/DeleteOrderButton";
 
 export default async function AdminOrdersPage({
   params,
@@ -31,11 +32,12 @@ export default async function AdminOrdersPage({
               <th className="p-3 text-start font-medium">Date</th>
               <th className="p-3 text-start font-medium">Status</th>
               <th className="p-3 text-start font-medium">Total</th>
+              <th className="p-3 text-end font-medium">&nbsp;</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
             {orders.map((o) => (
-              <tr key={o.id} className="cursor-pointer hover:bg-muted/30">
+              <tr key={o.id} className="hover:bg-muted/30">
                 <td className="p-3">
                   <Link href={`/admin/orders/${o.id}` as never} className="font-medium hover:text-primary">
                     {o.reference}
@@ -46,10 +48,13 @@ export default async function AdminOrdersPage({
                 <td className="p-3 text-muted-foreground">{dateFmt.format(new Date(o.createdAt))}</td>
                 <td className="p-3"><OrderStatusBadge status={o.status} /></td>
                 <td className="p-3 font-medium">{formatPrice(o.grandTotal, locale)}</td>
+                <td className="p-3 text-end">
+                  <DeleteOrderButton id={o.id} reference={o.reference} compact />
+                </td>
               </tr>
             ))}
             {orders.length === 0 && (
-              <tr><td colSpan={5} className="p-8 text-center text-muted-foreground">No orders yet.</td></tr>
+              <tr><td colSpan={6} className="p-8 text-center text-muted-foreground">No orders yet.</td></tr>
             )}
           </tbody>
         </table>

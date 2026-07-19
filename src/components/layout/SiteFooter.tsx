@@ -21,6 +21,7 @@ export async function SiteFooter({
   const serviceLinks = [
     { label: tf("aboutUs"), href: "/pages/about" },
     { label: tf("faq"), href: "/pages/faq" },
+    { label: tf("complaints"), href: "/pages/complaints" },
     { label: tf("shipping"), href: "/pages/shipping" },
     { label: tf("returns"), href: "/pages/returns" },
     { label: tf("privacyPolicy"), href: "/pages/privacy" },

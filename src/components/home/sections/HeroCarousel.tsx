@@ -71,7 +71,7 @@ export function HeroCarousel({
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-black/10" />
 
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 text-center text-white">
-            <h1 className="max-w-3xl font-display text-5xl font-semibold uppercase leading-[1.05] tracking-[0.06em] drop-shadow-sm sm:text-7xl">
+            <h1 className="glass-on-dark max-w-md px-6 py-4 font-display text-base font-semibold uppercase leading-snug tracking-[0.08em] sm:max-w-xl sm:px-8 sm:text-xl">
               {t(b.title, locale)}
             </h1>
             <Link

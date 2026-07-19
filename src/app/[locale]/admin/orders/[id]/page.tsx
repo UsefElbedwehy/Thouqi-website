@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import type { LocalizedText } from "@/config/types";
 import type { OrderStatus } from "@/core/orders/types";
 import { OrderStatusForm } from "@/components/admin/OrderStatusForm";
+import { DeleteOrderButton } from "@/components/admin/DeleteOrderButton";
 
 export default async function AdminOrderDetailPage({
   params,
@@ -24,9 +25,12 @@ export default async function AdminOrderDetailPage({
   return (
     <div>
       <Link href="/admin/orders" className="text-sm text-muted-foreground hover:text-foreground">← Orders</Link>
-      <h1 className="mb-8 mt-1 font-display text-3xl font-semibold uppercase tracking-[0.06em]">
-        {(order.reference as string) ?? (order.id as string)}
-      </h1>
+      <div className="mb-8 mt-1 flex items-center justify-between gap-4">
+        <h1 className="font-display text-3xl font-semibold uppercase tracking-[0.06em]">
+          {(order.reference as string) ?? (order.id as string)}
+        </h1>
+        <DeleteOrderButton id={order.id as string} reference={(order.reference as string) ?? (order.id as string)} />
+      </div>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <div className="space-y-6">

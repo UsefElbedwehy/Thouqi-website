@@ -186,3 +186,15 @@ export async function updateOrderAction(raw: unknown): Promise<AdminActionResult
   revalidatePath("/admin/orders");
   return { ok: true };
 }
+
+/** Permanently delete an order (order_items cascade). For clearing test data. */
+export async function deleteOrderAction(id: string): Promise<AdminActionResult> {
+  await assertAdmin();
+  const parsed = z.string().uuid().safeParse(id);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const db = createSupabaseAdminClient();
+  const { error } = await db.from("orders").delete().eq("id", parsed.data);
+  if (error) return { ok: false, error: error.message };
+  revalidatePath("/admin/orders");
+  return { ok: true };
+}
